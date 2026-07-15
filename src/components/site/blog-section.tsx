@@ -119,9 +119,13 @@ export function BlogSection() {
           viewport={viewportOnce}
           transition={{ duration: 0.6, delay: 0.3, ease: EASE_CINEMA }}
         >
-          <button className="link-underline text-[11px] uppercase tracking-[0.3em] text-muted-foreground transition-colors hover:text-primary">
-            {t.blog.viewAll} →
-          </button>
+          <Link
+            href="/blog"
+            className="group inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.3em] text-muted-foreground transition-colors hover:text-primary"
+          >
+            {t.blog.viewAll}
+            <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
         </motion.div>
       </div>
     </section>
