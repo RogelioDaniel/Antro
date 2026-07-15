@@ -11,6 +11,7 @@ import {
   Phone,
   Users,
   Calendar,
+  CalendarDays,
   Loader2,
   ArrowLeft,
   ShieldCheck,
@@ -232,6 +233,13 @@ export function AdminReservationsView() {
           </h1>
         </div>
         <div className="flex items-center gap-2">
+          <a
+            href="/admin/availability"
+            className="inline-flex h-10 items-center gap-2 rounded-none border border-border/50 px-4 text-[10px] uppercase tracking-[0.2em] text-foreground/80 transition-colors hover:border-primary/50 hover:text-primary"
+          >
+            <CalendarDays className="size-3.5" />
+            Availability
+          </a>
           <button
             onClick={load}
             disabled={loading}

@@ -8,6 +8,20 @@ import { useT } from "@/lib/lang-store";
 import { EASE_CINEMA } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
 
+// Deterministic ember positions for cinematic ambience (avoids re-randomizing on re-render)
+const EMBER_CONFIG = [
+  { left: 8, dur: 14, delay: 0, drift: 30, size: 2 },
+  { left: 18, dur: 18, delay: 3, drift: -20, size: 1.5 },
+  { left: 27, dur: 12, delay: 6, drift: 40, size: 2.5 },
+  { left: 38, dur: 20, delay: 1.5, drift: -35, size: 1.5 },
+  { left: 47, dur: 16, delay: 8, drift: 25, size: 2 },
+  { left: 56, dur: 22, delay: 4, drift: -15, size: 1.5 },
+  { left: 64, dur: 13, delay: 7, drift: 45, size: 2.5 },
+  { left: 73, dur: 19, delay: 2, drift: -25, size: 2 },
+  { left: 82, dur: 15, delay: 5, drift: 30, size: 1.5 },
+  { left: 91, dur: 17, delay: 9, drift: -40, size: 2 },
+];
+
 export function HeroSection() {
   const t = useT();
   const ref = useRef<HTMLElement>(null);
@@ -48,6 +62,24 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/55 to-[#0a0a0a]/70" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(10,10,10,0.6)_85%)]" />
       <div className="cinematic-grain absolute inset-0 opacity-70" />
+
+      {/* Floating gold embers */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        {EMBER_CONFIG.map((e, i) => (
+          <span
+            key={i}
+            className="ember"
+            style={{
+              left: `${e.left}%`,
+              animationDuration: `${e.dur}s`,
+              animationDelay: `${e.delay}s`,
+              ["--drift" as string]: `${e.drift}px`,
+              width: `${e.size}px`,
+              height: `${e.size}px`,
+            }}
+          />
+        ))}
+      </div>
 
       {/* Content */}
       <motion.div

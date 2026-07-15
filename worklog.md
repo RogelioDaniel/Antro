@@ -447,3 +447,54 @@ Task: Assess project status, QA via agent-browser, add sitemap/robots, blog inde
 5. **Blog CMS** — move blog articles to a Prisma `Article` model with a rich-text editor.
 6. **Performance audit** — Lighthouse pass; preload hero image, lazy-load below-the-fold.
 7. **Real auth** — replace the admin PIN gate with NextAuth.js (credentials or magic-link) for production-grade protection.
+
+---
+Task ID: cron-review-6 (webDevReview round 6)
+Agent: main (Z.ai Code) — cron-triggered
+Task: Assess project status, QA via agent-browser, add admin availability management, hero ember ambience, admin cross-linking.
+
+## Current Project Status (assessment)
+- Round 5 added sitemap/robots, blog index page, admin reservations dashboard, menu richness. Project stable, lint clean.
+- VLM audit identified: no admin availability/calendar management, no granular cookie preferences, no next/image optimization.
+- No bugs found; this round focused on admin availability management (highest-impact) + hero ambient styling.
+
+## QA Performed (agent-browser)
+- Home page: zero console errors / zero page errors. Hero renders with 10 gold ember elements (verified via DOM). ✓
+- Admin availability page: GET /admin/availability → PIN gate → entered "LANEGRA" → dashboard loaded with 30 calendar tiles (Jul/Aug/Sep 2026, Thu/Fri/Sat only). Selected "Thu Jul 16" → editor panel showed date + status (OPEN · 63 seats) + quick-set buttons. Clicked "FULL" → UI updated to FULL · 0 seats, DB verified via Prisma: `{status:"full", seats:0}`. ✓
+- Availability PATCH API: tested via curl → returned `{ ok: true, day: {...} }` with upserted row. ✓
+- Admin cross-linking: reservations view now has an "Availability" button linking to /admin/availability; availability view has a "Reservations" button linking back. ✓
+- VLM audits: admin availability page 8/10 (calendar grid + editor panel + quick-set + custom seats confirmed), overall polish 8/10.
+
+## Completed Modifications
+### New features added
+1. **Admin availability management** (`/admin/availability`):
+   - `src/app/api/availability/route.ts`: new PATCH handler — accepts `{ date, status, seatsLeft }`, validates (yyyy-mm-dd, open/limited/full, 0-200 seats), upserts the ReservationDay row to override the seeder.
+   - `src/components/site/admin-shared.tsx`: shared `useAdminAuth` hook (sessionStorage PIN persistence) + `AdminPinGate` component (reusable PIN gate with Lock icon, error state, demo PIN hint) — extracted to avoid duplication between admin views.
+   - `src/components/site/admin-availability-view.tsx`: PIN-gated calendar editor — month-grouped grid of date tiles (color-coded open/limited/full with seat counts), editor panel with selected date + status badge + quick-set buttons (Open=80 seats / Limited=15 / Full=0) + custom seats input with auto-derived status (0=full, 1-20=limited, 21+=open). Refresh + Lock + cross-link to Reservations.
+   - `src/app/admin/availability/page.tsx`: route with noindex metadata.
+   - `admin-reservations-view.tsx`: added "Availability" button (CalendarDays icon) linking to /admin/availability.
+
+### Styling refinements (mandatory)
+- **Hero gold embers**: 10 deterministic floating gold particles (1.5-2.5px, glowing via box-shadow) that rise from bottom to top over 12-22s with varied horizontal drift + delays. CSS `@keyframes ember-rise` + `.ember` utility class in globals.css. Adds cinematic "smoke/amber" ambience without performance overhead (CSS-only, pointer-events-none). Verified 10 embers render in DOM.
+- **Admin availability calendar**: color-coded tiles (open=dark, limited=amber border, full=deep red opacity), animated selection check (layoutId), hover states, scrollable month groups.
+- **Admin editor panel**: slide-in animation, status badge with colored dot, quick-set buttons with active state highlighting, custom seats input with auto-derive hint.
+
+## Verification Results
+- `bun run lint` → 0 errors, 0 warnings.
+- dev.log → clean compiles, GET / 200, GET /admin/availability 200, PATCH /api/availability 200, zero runtime errors.
+- agent-browser end-to-end: admin PIN gate → availability dashboard (30 tiles) → select date → click Full → UI + DB both updated ✓.
+- VLM audit: admin availability 8/10, overall polish 8/10.
+
+## Unresolved Issues / Risks
+- None blocking. The admin PIN gate remains a demo-only client-side check (shared `useAdminAuth` hook now reused across both admin views).
+- The hero embers are very subtle (1.5-2.5px) and not visible in static VLM screenshots — verified via DOM inspection (10 elements render).
+- Cookie consent granularity + next/image optimization deferred to a future round (lower priority than the admin availability feature).
+
+## Priority Recommendations for Next Phase
+1. **Cookie consent granularity** — add a "Manage preferences" modal with analytics/marketing toggles (full LFPDPPP compliance).
+2. **next/image optimization** — convert `<img>` tags to `next/image` with blur placeholders for automatic format conversion + responsive sizing.
+3. **Real Spotify playlist** — replace the placeholder playlist ID with a curated La Negra brand playlist.
+4. **Real auth** — replace the admin PIN gate with NextAuth.js.
+5. **Blog CMS** — move blog articles to a Prisma `Article` model.
+6. **Performance audit** — Lighthouse pass; preload hero, lazy-load below-the-fold.
+7. **Reservation admin export** — CSV export of reservations for staff.

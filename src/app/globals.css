@@ -229,4 +229,28 @@
   .whatsapp-pulse {
     animation: pulse-ring 2.4s cubic-bezier(0.66, 0, 0, 1) infinite;
   }
+  /* Floating gold embers for cinematic hero ambience */
+  @keyframes ember-rise {
+    0% {
+      transform: translateY(0) translateX(0) scale(1);
+      opacity: 0;
+    }
+    10% { opacity: 0.7; }
+    90% { opacity: 0.3; }
+    100% {
+      transform: translateY(-100vh) translateX(var(--drift, 20px)) scale(0.4);
+      opacity: 0;
+    }
+  }
+  .ember {
+    position: absolute;
+    bottom: -10px;
+    width: 2px;
+    height: 2px;
+    border-radius: 9999px;
+    background: #c5a059;
+    box-shadow: 0 0 6px 1px rgba(197, 160, 89, 0.6);
+    animation: ember-rise linear infinite;
+    pointer-events: none;
+  }
 }

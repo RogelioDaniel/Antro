@@ -63,3 +63,36 @@ export async function GET(req: Request) {
     );
   }
 }
+
+/**
+ * PATCH /api/availability?XTransformPort=3000
+ * Body: { date, status, seatsLeft }
+ * Admin action: upserts a ReservationDay row to override the seeder.
+ */
+export async function PATCH(req: Request) {
+  try {
+    const body = await req.json().catch(() => ({}));
+    const date: string = (body?.date ?? "").trim();
+    const status: string = (body?.status ?? "").trim();
+    const seatsLeft = Number(body?.seatsLeft);
+
+    if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date))
+      return NextResponse.json({ error: "Invalid date (yyyy-mm-dd)" }, { status: 400 });
+    if (!["open", "limited", "full"].includes(status))
+      return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+    if (!Number.isFinite(seatsLeft) || seatsLeft < 0 || seatsLeft > 200)
+      return NextResponse.json({ error: "Invalid seatsLeft" }, { status: 400 });
+
+    const day = await db.reservationDay.upsert({
+      where: { date },
+      update: { status, seatsLeft },
+      create: { date, status, seatsLeft },
+    });
+    return NextResponse.json({ ok: true, day });
+  } catch (e) {
+    return NextResponse.json(
+      { error: (e as Error).message },
+      { status: 500 }
+    );
+  }
+}
