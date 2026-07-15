@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Droplet, Wine, Utensils } from "lucide-react";
 import { fadeUp, staggerContainer, viewportOnce, EASE_CINEMA } from "@/lib/motion";
 
 const GALLERY = [
@@ -102,18 +103,23 @@ export function ExperienceSection() {
           variants={staggerContainer}
         >
           {[
-            { k: "01", t: "Mezcal de Pueblo", d: "Espíritus trazables, destilados por maestros mezcaleros." },
-            { k: "02", t: "Mixología de Autor", d: "Cócteles que reinterpretan la cantina mexicana." },
-            { k: "03", t: "Curaduría Gastronómica", d: "Alta cocina informal que acompaña la noche." },
+            { k: "01", icon: "droplet", t: "Mezcal de Pueblo", d: "Espíritus trazables, destilados por maestros mezcaleros." },
+            { k: "02", icon: "wine", t: "Mixología de Autor", d: "Cócteles que reinterpretan la cantina mexicana." },
+            { k: "03", icon: "utensils", t: "Curaduría Gastronómica", d: "Alta cocina informal que acompaña la noche." },
           ].map((p) => (
             <motion.div
               key={p.k}
               variants={fadeUp}
-              className="group bg-[#0d0d0d] p-7 transition-colors hover:bg-[#121212]"
+              className="group relative bg-[#0d0d0d] p-7 transition-colors hover:bg-[#121212]"
             >
-              <span className="font-serif-display text-3xl text-primary/60 transition-colors group-hover:text-primary">
-                {p.k}
-              </span>
+              {/* gold top accent on hover */}
+              <span className="absolute inset-x-0 top-0 h-px scale-x-0 bg-primary transition-transform duration-500 group-hover:scale-x-100" />
+              <div className="flex items-center justify-between">
+                <span className="font-serif-display text-3xl text-primary/60 transition-colors group-hover:text-primary">
+                  {p.k}
+                </span>
+                <PillarIcon name={p.icon} />
+              </div>
               <h3 className="mt-3 font-serif-display text-xl text-foreground">
                 {p.t}
               </h3>
@@ -126,6 +132,14 @@ export function ExperienceSection() {
       </div>
     </section>
   );
+}
+
+function PillarIcon({ name }: { name: string }) {
+  const cls =
+    "size-6 text-muted-foreground/50 transition-colors group-hover:text-primary";
+  if (name === "droplet") return <Droplet className={cls} />;
+  if (name === "wine") return <Wine className={cls} />;
+  return <Utensils className={cls} />;
 }
 
 function ParallaxCard({

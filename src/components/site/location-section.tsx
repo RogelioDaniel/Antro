@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { MapPin, Clock, Navigation, ExternalLink } from "lucide-react";
 import { SITE } from "@/lib/constants";
+import { useUIStore } from "@/lib/store";
 import { fadeUp, staggerFast, viewportOnce } from "@/lib/motion";
 
 export function LocationSection() {
@@ -90,9 +91,18 @@ export function LocationSection() {
                 </p>
               </motion.div>
 
-              <motion.div variants={fadeUp} className="border-l border-primary/40 pl-6">
-                <div className="text-[10px] uppercase tracking-[0.35em] text-primary">
-                  Dress Code
+              <motion.button
+                variants={fadeUp}
+                onClick={() => useUIStore.getState().openDressCode()}
+                className="group block w-full border-l border-primary/40 pl-6 text-left transition-colors"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="text-[10px] uppercase tracking-[0.35em] text-primary">
+                    Dress Code
+                  </div>
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground transition-colors group-hover:text-primary">
+                    Ver →
+                  </span>
                 </div>
                 <p className="mt-3 font-serif-display text-2xl text-foreground">
                   Smart Casual
@@ -100,7 +110,7 @@ export function LocationSection() {
                 <p className="mt-1 text-[13px] text-muted-foreground">
                   Reservamos el derecho de admisión.
                 </p>
-              </motion.div>
+              </motion.button>
             </div>
 
             <motion.div variants={fadeUp} className="flex flex-col gap-3 sm:flex-row">

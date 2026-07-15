@@ -20,6 +20,16 @@ export interface VipData {
   agreedDressCode: boolean;
 }
 
+export interface PrivateEventData {
+  name: string;
+  email: string;
+  phone: string;
+  eventType: string;
+  date: string;
+  guests: string;
+  message: string;
+}
+
 function normalizePhone(raw: string): string {
   // Keep digits, ensure mexican prefix if user wrote local number
   const digits = raw.replace(/\D/g, "");
@@ -61,6 +71,24 @@ export function buildVipMessage(d: VipData): string {
     "",
     "Solicito acceso a la lista VIP de La Negra.",
   ].join("\n");
+}
+
+export function buildPrivateEventMessage(d: PrivateEventData): string {
+  return [
+    "*LA NEGRA — Evento Privado*",
+    "",
+    `Contacto: ${d.name}`,
+    `Email: ${d.email}`,
+    `Teléfono: ${d.phone}`,
+    `Tipo de evento: ${d.eventType}`,
+    `Fecha tentativa: ${d.date}`,
+    `Personas: ${d.guests}`,
+    d.message ? `Mensaje: ${d.message}` : "",
+    "",
+    "Solicito cotización para un evento privado en La Negra.",
+  ]
+    .filter(Boolean)
+    .join("\n");
 }
 
 export function openWhatsApp(message: string) {

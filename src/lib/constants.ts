@@ -28,7 +28,9 @@ export const SITE = {
 export const NAV_LINKS = [
   { id: "experience", label: "Experience" },
   { id: "menu", label: "Menu" },
+  { id: "gallery", label: "Gallery" },
   { id: "events", label: "Events" },
+  { id: "voices", label: "Voices" },
   { id: "location", label: "Location" },
 ] as const;
 
@@ -243,3 +245,146 @@ export const VIP_ARRIVAL_SLOTS = [
   "00:00",
   "00:30",
 ] as const;
+
+export interface GalleryImage {
+  src: string;
+  alt: string;
+  caption: string;
+  /** tailwind span classes for masonry feel */
+  span: string;
+}
+
+export const GALLERY: GalleryImage[] = [
+  {
+    src: "/images/gallery/g1.png",
+    alt: "Mezcal copita being filled with amber liquid",
+    caption: "The Pour",
+    span: "sm:col-span-1 sm:row-span-2",
+  },
+  {
+    src: "/images/gallery/g2.png",
+    alt: "Dark luxury cantina bar counter at night",
+    caption: "The Room",
+    span: "sm:col-span-2",
+  },
+  {
+    src: "/images/gallery/g3.png",
+    alt: "Elegant woman holding a crystal cocktail glass",
+    caption: "The Night",
+    span: "sm:col-span-1 sm:row-span-2",
+  },
+  {
+    src: "/images/gallery/g4.png",
+    alt: "Dehydrated citrus wheels and marigold flowers",
+    caption: "The Garnish",
+    span: "sm:col-span-1",
+  },
+  {
+    src: "/images/gallery/g5.png",
+    alt: "Brass shaker and crystal glasses on dark bar",
+    caption: "The Craft",
+    span: "sm:col-span-1 sm:row-span-2",
+  },
+  {
+    src: "/images/gallery/g6.png",
+    alt: "Hands cutting fresh agave hearts on dark wood",
+    caption: "The Origin",
+    span: "sm:col-span-2",
+  },
+  {
+    src: "/images/gallery/g7.png",
+    alt: "Clay pot of mezcal with wooden spoon",
+    caption: "The Earth",
+    span: "sm:col-span-1",
+  },
+  {
+    src: "/images/gallery/g8.png",
+    alt: "Bartender silhouette polishing a crystal glass",
+    caption: "The Keeper",
+    span: "sm:col-span-1 sm:row-span-2",
+  },
+];
+
+export interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+  avatar: string;
+}
+
+export const TESTIMONIALS: Testimonial[] = [
+  {
+    quote:
+      "La Negra no es un bar, es un ritual. El mejor mezcal que he probado fuera de Oaxaca, en una habitación que huele a humo y oro.",
+    name: "Mariana Olvera",
+    role: "Crítica gastronómica",
+    avatar: "/images/avatar-1.png",
+  },
+  {
+    quote:
+      "Vine por una copa y me quedé hasta el cierre. La mixología es de otro nivel; cada trago cuenta una historia.",
+    name: "Diego Fuentes",
+    role: "DJ & productor",
+    avatar: "/images/avatar-2.png",
+  },
+  {
+    quote:
+      "El lugar donde la noche de la Roma empieza de verdad. Servicio impecable, ambiente íntimo, oscuridad elegante.",
+    name: "Lucía Mendoza",
+    role: "Directora de arte",
+    avatar: "/images/avatar-3.png",
+  },
+  {
+    quote:
+      "Reservé por WhatsApp en minutos. La lista VIP funcionó perfecto. Entramos sin esperar, la música estaba divina.",
+    name: "Sebastián Ríos",
+    role: "Arquitecto",
+    avatar: "/images/avatar-2.png",
+  },
+  {
+    quote:
+      "Una cantina que respeta el mezcal y eleva la noche. El bao fish taco es perfecto. Volveré pronto.",
+    name: "Valentina Cruz",
+    role: "Sumiller",
+    avatar: "/images/avatar-1.png",
+  },
+];
+
+export interface PrivateEventOption {
+  id: string;
+  title: string;
+  tagline: string;
+  description: string;
+  features: string[];
+  capacity: string;
+}
+
+export const PRIVATE_EVENTS: PrivateEventOption[] = [
+  {
+    id: "private-room",
+    title: "Salón Privado",
+    tagline: "8 — 20 personas",
+    description:
+      "Espacio íntimo con mesa de catador y mezcalero dedicado. Ideal para celebraciones y cenas de cierre.",
+    features: ["Mezcalero dedicado", "Menú degustación", "Mesa de catador"],
+    capacity: "8 — 20",
+  },
+  {
+    id: "full-venue",
+    title: "Toma Completa",
+    tagline: "80 — 120 personas",
+    description:
+      "La cantina entera para ti. Branding personalizado, playlist curada y barra libre de autor.",
+    features: ["Branding personalizado", "Barra libre de autor", "DJ residente"],
+    capacity: "80 — 120",
+  },
+  {
+    id: "corporate",
+    title: "Experiencia Corporativa",
+    tagline: "15 — 50 personas",
+    description:
+      "Catas guiadas y cócteles de equipo. Una manera diferente de cerrar negocios en la Roma.",
+    features: ["Cata guiada", "Cócteles de equipo", "Coffee to mezcal"],
+    capacity: "15 — 50",
+  },
+];
