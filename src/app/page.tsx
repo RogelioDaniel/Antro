@@ -21,29 +21,37 @@ import { PrivateEventsModal } from "@/components/site/private-events-modal";
 import { AvailabilityModal } from "@/components/site/availability-modal";
 import { CookieConsent } from "@/components/site/cookie-consent";
 import { SectionDivider } from "@/components/site/section-divider";
+import { KineticMarquee } from "@/components/site/kinetic-marquee";
+import { WowSection } from "@/components/site/wow-section";
+import { PatternCtaSection } from "@/components/site/pattern-cta-section";
+import { useT } from "@/lib/lang-store";
 
 export default function Home() {
+  const t = useT();
+
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <CinematicLoader />
       <Navbar />
       <main className="flex-1">
         <HeroSection />
-        <SectionDivider label="Experience" />
+        <KineticMarquee phrase={t.kinetic.marquee.experience} />
         <ExperienceSection />
-        <SectionDivider label="The Menu" />
+        <KineticMarquee phrase={t.kinetic.marquee.menu} reverse />
         <MenuSection />
-        <SectionDivider label="Gallery" />
+        <KineticMarquee phrase={t.kinetic.marquee.gallery} />
         <GallerySection />
-        <SectionDivider label="The Night's List" />
+        <WowSection />
+        <KineticMarquee phrase={t.kinetic.marquee.events} reverse />
         <EventsSection />
         <VoicesSection />
-        <SectionDivider label="Private Events" />
+        <KineticMarquee phrase={t.kinetic.marquee.privateEvents} />
         <PrivateEventsSection />
         <SectionDivider label="Find Us" />
         <LocationSection />
         <SectionDivider label="The Journal" />
         <BlogSection />
+        <PatternCtaSection />
         <NewsletterSection />
       </main>
       <SiteFooter />

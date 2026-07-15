@@ -1,108 +1,113 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useUIStore } from "@/lib/store";
 import { useT } from "@/lib/lang-store";
-import { EASE_CINEMA } from "@/lib/motion";
+import { EASE_KINETIC } from "@/lib/motion";
 
 /**
- * Cinematic boot loader.
- * - Solid black overlay
- * - "LA NEGRA" fades in with a blur-to-focus effect
- * - A thin gold line draws underneath the logo from centre outward
- * - Duration ~2.5s, then fades out revealing the hero
- * - Body scroll is locked while visible
+ * Kinetic boot loader (campaign-style).
+ * Phase 1 (0–1.1s): three gold bars pulse on black.
+ * Phase 2 (1.1–2.6s): the house phrase crosses the screen at giant scale,
+ *   zooming from oversized to readable as it slides — kinetic marquee.
+ * Exit: the whole panel wipes upward like a curtain, revealing the hero.
+ * Body scroll is locked while visible. Reduced motion: simple fade.
  */
 export function CinematicLoader() {
   const t = useT();
   const setLoaderDone = useUIStore((s) => s.setLoaderDone);
+  const prefersReduced = useReducedMotion();
+  const [phase, setPhase] = useState<"bars" | "phrase">("bars");
   const [show, setShow] = useState(true);
 
   useEffect(() => {
-    // Lock scroll while the loader is on screen.
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    const fadeTimer = setTimeout(() => setShow(false), 2500);
-    const doneTimer = setTimeout(() => {
-      setLoaderDone(true);
-      document.body.style.overflow = prev || "";
-    }, 3200);
+    const phraseTimer = setTimeout(() => setPhase("phrase"), 1100);
+    const hideTimer = setTimeout(() => setShow(false), prefersReduced ? 1200 : 2700);
+    const doneTimer = setTimeout(
+      () => {
+        setLoaderDone(true);
+        document.body.style.overflow = prev || "";
+      },
+      prefersReduced ? 1600 : 3400,
+    );
 
     return () => {
-      clearTimeout(fadeTimer);
+      clearTimeout(phraseTimer);
+      clearTimeout(hideTimer);
       clearTimeout(doneTimer);
       document.body.style.overflow = prev || "";
     };
-  }, [setLoaderDone]);
+  }, [setLoaderDone, prefersReduced]);
 
   return (
     <AnimatePresence>
       {show && (
         <motion.div
-          key="cinematic-loader"
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#0a0a0a]"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.7, ease: EASE_CINEMA }}
+          key="kinetic-loader"
+          className="wine-surface fixed inset-0 z-[100] flex items-center justify-center overflow-hidden"
+          initial={{ y: 0, opacity: 1 }}
+          exit={
+            prefersReduced
+              ? { opacity: 0, transition: { duration: 0.5 } }
+              : { y: "-100%", transition: { duration: 0.8, ease: EASE_KINETIC } }
+          }
           aria-hidden="true"
           role="status"
           aria-live="polite"
         >
-          {/* faint grain */}
-          <div className="cinematic-grain absolute inset-0 opacity-60" />
+          <div className="cinematic-grain absolute inset-0 opacity-50" />
 
-          <motion.div
-            className="relative flex flex-col items-center"
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.span
-              className="font-serif-display text-[clamp(2rem,7vw,3.75rem)] font-semibold tracking-[0.35em] text-foreground"
-              variants={{
-                hidden: { opacity: 0, filter: "blur(16px)", letterSpacing: "0.55em" },
-                visible: {
-                  opacity: 1,
-                  filter: "blur(0px)",
-                  letterSpacing: "0.35em",
-                  transition: { duration: 1.4, ease: EASE_CINEMA },
-                },
-              }}
-            >
-              LA NEGRA
-            </motion.span>
+          {/* Phase 1 — three pulsing gold bars (the beat before the drop) */}
+          {phase === "bars" && (
+            <div className="flex items-center gap-5" aria-hidden="true">
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  className="block h-24 w-7 bg-primary sm:h-32 sm:w-9"
+                  style={{
+                    animation: prefersReduced
+                      ? undefined
+                      : `bar-pulse 0.55s ease-in-out ${i * 0.14}s infinite`,
+                    transformOrigin: "center",
+                  }}
+                />
+              ))}
+            </div>
+          )}
 
-            {/* gold line drawing from center outward */}
+          {/* Phase 2 — giant phrase slams across the screen */}
+          {phase === "phrase" && (
             <motion.div
-              className="mt-6 h-px bg-primary"
-              style={{ transformOrigin: "center" }}
-              initial={{ scaleX: 0, width: "0%", opacity: 0 }}
-              animate={{
-                scaleX: 1,
-                width: "min(60vw, 320px)",
-                opacity: 1,
-              }}
-              transition={{ duration: 1.1, ease: EASE_CINEMA, delay: 0.7 }}
-            />
-
-            <motion.span
-              className="mt-4 text-[10px] uppercase tracking-[0.5em] text-muted-foreground"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 1.4, ease: EASE_CINEMA }}
+              className="font-kinetic whitespace-nowrap text-foreground"
+              style={{ fontSize: "clamp(6rem, 26vw, 22rem)" }}
+              initial={
+                prefersReduced
+                  ? { opacity: 0 }
+                  : { x: "60%", scale: 1.35, opacity: 1 }
+              }
+              animate={
+                prefersReduced
+                  ? { opacity: 1 }
+                  : { x: "-60%", scale: 1, opacity: 1 }
+              }
+              transition={
+                prefersReduced
+                  ? { duration: 0.4 }
+                  : { duration: 1.7, ease: [0.3, 0.1, 0.3, 1] }
+              }
             >
-              {t.loader.tagline}
-            </motion.span>
-          </motion.div>
+              {t.kinetic.loaderPhrase}
+            </motion.div>
+          )}
 
-          {/* progress dot */}
-          <motion.span
-            className="absolute bottom-10 h-1 w-1 rounded-full bg-primary"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: [0, 1, 0] }}
-            transition={{ duration: 1.2, repeat: Infinity, delay: 1.6 }}
-          />
+          {/* Corner brand mark, quiet and constant */}
+          <span className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.5em] text-foreground/60">
+            LA NEGRA · {t.loader.tagline}
+          </span>
         </motion.div>
       )}
     </AnimatePresence>

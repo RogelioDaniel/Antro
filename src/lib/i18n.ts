@@ -19,6 +19,37 @@ export interface Dict {
   loader: {
     tagline: string;
   };
+  kinetic: {
+    /** Phrase that zooms across the screen during the loader. */
+    loaderPhrase: string;
+    /** Giant single word that owns the hero. */
+    heroWord: string;
+    /** Small word stacked above the giant hero word. */
+    heroPre: string;
+    /** Repeated phrase tiled across the hero background wall. */
+    heroTile: string;
+    /** Marquee divider phrases, keyed by section. */
+    marquee: {
+      experience: string;
+      menu: string;
+      gallery: string;
+      events: string;
+      privateEvents: string;
+      journal: string;
+    };
+    /** Wow rings section. */
+    wow: {
+      word: string;
+      ring: string;
+      caption: string;
+    };
+    /** Pattern CTA section. */
+    patternCta: {
+      h2Line1: string;
+      h2Line2: string;
+      button: string;
+    };
+  };
   hero: {
     eyebrow: string;
     h1Line1: string;
@@ -228,6 +259,30 @@ const es: Dict = {
     vip: "Lista VIP",
   },
   loader: { tagline: "Cantina · CDMX" },
+  kinetic: {
+    loaderPhrase: "LA NOCHE ES NEGRA",
+    heroWord: "NEGRA",
+    heroPre: "La",
+    heroTile: "LA NOCHE ES NEGRA",
+    marquee: {
+      experience: "LA EXPERIENCIA",
+      menu: "LA CARTA",
+      gallery: "LA GALERÍA",
+      events: "LA LISTA DE LA NOCHE",
+      privateEvents: "EVENTOS PRIVADOS",
+      journal: "EL DIARIO",
+    },
+    wow: {
+      word: "EUFORIA",
+      ring: "LA NOCHE ES NEGRA · MEZCAL · MIXOLOGÍA · ",
+      caption: "Esto no se cuenta. Se vive.",
+    },
+    patternCta: {
+      h2Line1: "LA MESA DE HOY ES",
+      h2Line2: "LA LEYENDA DE MAÑANA",
+      button: "Reservar ahora",
+    },
+  },
   hero: {
     eyebrow: "Roma-Condesa · CDMX",
     h1Line1: "El origen de la",
@@ -487,6 +542,30 @@ const en: Dict = {
     vip: "VIP List",
   },
   loader: { tagline: "Cantina · CDMX" },
+  kinetic: {
+    loaderPhrase: "THE NIGHT IS BLACK",
+    heroWord: "NEGRA",
+    heroPre: "La",
+    heroTile: "THE NIGHT IS BLACK",
+    marquee: {
+      experience: "THE EXPERIENCE",
+      menu: "THE MENU",
+      gallery: "THE GALLERY",
+      events: "THE NIGHT'S LIST",
+      privateEvents: "PRIVATE EVENTS",
+      journal: "THE JOURNAL",
+    },
+    wow: {
+      word: "EUPHORIA",
+      ring: "THE NIGHT IS BLACK · MEZCAL · MIXOLOGY · ",
+      caption: "You don't tell this story. You live it.",
+    },
+    patternCta: {
+      h2Line1: "TONIGHT'S TABLE IS",
+      h2Line2: "TOMORROW'S LEGEND",
+      button: "Reserve now",
+    },
+  },
   hero: {
     eyebrow: "Roma-Condesa · CDMX",
     h1Line1: "The origin of the",

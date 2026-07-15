@@ -59,3 +59,28 @@ export const blurFocus: Variants = {
 
 /** Shared viewport config for useInView-driven sections. */
 export const viewportOnce = { once: true, amount: 0.25 } as const;
+
+/* ------------------------------------------------------------------
+   Kinetic system — campaign-style motion (loader, hero, wow moments)
+   ------------------------------------------------------------------ */
+
+/** Snappier ease for the loud kinetic moments (heavy type slamming in). */
+export const EASE_KINETIC = [0.83, 0, 0.17, 1] as const;
+
+/** Per-letter drop used on the giant hero word. */
+export const letterDrop: Variants = {
+  hidden: { opacity: 0, y: "0.6em", rotate: 3, filter: "blur(6px)" },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    rotate: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.7, delay: 0.05 * i, ease: EASE_KINETIC },
+  }),
+};
+
+/** Container that staggers giant letters. */
+export const letterStagger: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.05, delayChildren: 0.15 } },
+};

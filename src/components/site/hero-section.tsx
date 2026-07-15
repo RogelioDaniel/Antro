@@ -1,12 +1,11 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import Image from "next/image";
 import { ArrowDown } from "lucide-react";
 import { useUIStore } from "@/lib/store";
 import { useT } from "@/lib/lang-store";
-import { EASE_CINEMA } from "@/lib/motion";
+import { EASE_CINEMA, letterDrop, letterStagger } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
 
 // Deterministic ember positions for cinematic ambience (avoids re-randomizing on re-render)
@@ -23,48 +22,59 @@ const EMBER_CONFIG = [
   { left: 91, dur: 17, delay: 9, drift: -40, size: 2 },
 ];
 
+const TILE_ROWS = 9;
+const TILE_REPEATS = 8;
+
 export function HeroSection() {
   const t = useT();
   const ref = useRef<HTMLElement>(null);
   const openReservation = useUIStore((s) => s.openReservation);
   const openVip = useUIStore((s) => s.openVip);
+  const loaderDone = useUIStore((s) => s.loaderDone);
+  const prefersReduced = useReducedMotion();
 
-  // Slow cinematic parallax on the background image
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1.08, 1.22]);
   const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const wallY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+
+  const letters = t.kinetic.heroWord.split("");
 
   return (
     <section
       ref={ref}
       id="top"
-      className="relative flex h-[100svh] min-h-[640px] w-full items-center justify-center overflow-hidden"
+      className="wine-surface relative flex h-[100svh] min-h-[640px] w-full items-center justify-center overflow-hidden"
       aria-label="Inicio"
     >
-      {/* Background image with slow cinematic zoom */}
+      {/* Tiled phrase wall — the campaign wallpaper (KFC "EASY TO ENJOY" wall) */}
       <motion.div
-        className="absolute inset-0 will-change-transform"
-        style={{ y: bgY, scale: bgScale }}
+        className="pointer-events-none absolute inset-[-12%]"
+        style={{ y: wallY }}
+        aria-hidden="true"
       >
-        <Image
-          src="/images/hero-bg.png"
-          alt="Interior de la cantina La Negra con luz dorada y botellas de mezcal"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
+        <div className="tile-drift flex h-full flex-col justify-between">
+          {Array.from({ length: TILE_ROWS }).map((_, row) => (
+            <div
+              key={row}
+              className="font-kinetic whitespace-nowrap text-[clamp(2.2rem,5.5vw,4.5rem)] text-[#7a1f2b]/35"
+              style={{ transform: `translateX(${row % 2 === 0 ? -4 : 2}%)` }}
+            >
+              {Array.from({ length: TILE_REPEATS })
+                .map(() => t.kinetic.heroTile)
+                .join("    ")}
+            </div>
+          ))}
+        </div>
       </motion.div>
 
-      {/* Cinematic overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/55 to-[#0a0a0a]/70" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(10,10,10,0.6)_85%)]" />
-      <div className="cinematic-grain absolute inset-0 opacity-70" />
+      {/* Vignette + grain to keep the premium darkness */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(10,10,10,0.55)_90%)]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
+      <div className="cinematic-grain absolute inset-0 opacity-60" />
 
       {/* Floating gold embers */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -86,54 +96,81 @@ export function HeroSection() {
 
       {/* Content */}
       <motion.div
-        className="relative z-10 mx-auto flex max-w-5xl flex-col items-center px-6 text-center will-change-transform"
+        className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center px-6 text-center will-change-transform"
         style={{ y: contentY, opacity: contentOpacity }}
       >
         <motion.span
-          className="mb-6 text-[11px] uppercase tracking-[0.55em] text-primary sm:text-xs"
+          className="mb-4 text-[11px] uppercase tracking-[0.55em] text-primary sm:text-xs"
           initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.3, ease: EASE_CINEMA }}
+          animate={loaderDone ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.15, ease: EASE_CINEMA }}
         >
           {t.hero.eyebrow}
         </motion.span>
 
-        <motion.h1
-          className="font-serif-display text-foreground text-gold-glow text-[clamp(2.75rem,9vw,7rem)] font-medium leading-[0.95]"
-          initial={{ opacity: 0, y: 28, filter: "blur(12px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 1.3, delay: 0.45, ease: EASE_CINEMA }}
-        >
-          {t.hero.h1Line1}
-          <br />
-          <span className="gold-gradient-text italic">{t.hero.h1Line2}</span>
-        </motion.h1>
+        {/* Giant kinetic word — LA + NEGRA letter by letter */}
+        <h1 className="flex flex-col items-center" aria-label={`${t.kinetic.heroPre} ${t.kinetic.heroWord}`}>
+          <motion.span
+            className="font-display-quote text-[clamp(1.6rem,4vw,3rem)] italic leading-none text-primary"
+            initial={{ opacity: 0 }}
+            animate={loaderDone ? { opacity: 1 } : {}}
+            transition={{ duration: 0.8, delay: 0.35, ease: EASE_CINEMA }}
+            aria-hidden="true"
+          >
+            {t.kinetic.heroPre}
+          </motion.span>
+          <motion.span
+            className="font-kinetic mt-1 flex text-foreground"
+            style={{ fontSize: "clamp(5rem, 21vw, 19rem)" }}
+            variants={prefersReduced ? undefined : letterStagger}
+            initial={prefersReduced ? { opacity: 0 } : "hidden"}
+            animate={
+              loaderDone ? (prefersReduced ? { opacity: 1 } : "visible") : undefined
+            }
+            transition={prefersReduced ? { duration: 0.6 } : undefined}
+            aria-hidden="true"
+          >
+            {letters.map((ch, i) => (
+              <motion.span
+                key={`${ch}-${i}`}
+                custom={i}
+                variants={prefersReduced ? undefined : letterDrop}
+                className="inline-block"
+                style={{
+                  textShadow: "0 18px 60px rgba(0,0,0,0.55)",
+                }}
+              >
+                {ch}
+              </motion.span>
+            ))}
+          </motion.span>
+        </h1>
 
         <motion.p
-          className="mt-7 max-w-xl text-balance text-[15px] font-light leading-relaxed text-foreground/75 sm:text-base"
+          className="mt-6 max-w-xl text-balance text-[15px] font-light leading-relaxed text-foreground/80 sm:text-base"
           initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.85, ease: EASE_CINEMA }}
+          animate={loaderDone ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.75, ease: EASE_CINEMA }}
         >
           {t.hero.subtitle}
         </motion.p>
 
         <motion.div
-          className="mt-10 flex flex-col items-center gap-5 sm:flex-row sm:gap-7"
+          className="mt-9 flex flex-col items-center gap-5 sm:flex-row sm:gap-7"
           initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 1.1, ease: EASE_CINEMA }}
+          animate={loaderDone ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.95, ease: EASE_CINEMA }}
         >
           <Button
             onClick={openReservation}
             size="lg"
-            className="group h-13 rounded-none bg-primary px-9 py-6 text-[12px] uppercase tracking-[0.25em] text-primary-foreground transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(197,160,89,0.4)]"
+            className="group h-13 rounded-full bg-primary px-10 py-6 text-[12px] uppercase tracking-[0.25em] text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_50px_rgba(197,160,89,0.45)]"
           >
             {t.hero.ctaReserve}
           </Button>
           <button
             onClick={openVip}
-            className="link-underline text-[12px] uppercase tracking-[0.25em] text-foreground/85 transition-colors hover:text-primary"
+            className="rounded-full border border-foreground/30 px-8 py-3.5 text-[12px] uppercase tracking-[0.25em] text-foreground/90 transition-colors hover:border-primary hover:text-primary"
           >
             {t.hero.ctaVip}
           </button>
@@ -149,10 +186,10 @@ export function HeroSection() {
             window.scrollTo({ top, behavior: "smooth" });
           }
         }}
-        className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-muted-foreground"
+        className="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-2 text-foreground/70"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.6 }}
+        animate={loaderDone ? { opacity: 1 } : {}}
+        transition={{ duration: 1, delay: 1.4 }}
         aria-label={t.hero.scroll}
       >
         <span className="text-[9px] uppercase tracking-[0.4em]">{t.hero.scroll}</span>
@@ -168,10 +205,10 @@ export function HeroSection() {
       <motion.div
         className="absolute bottom-8 right-6 z-10 hidden flex-col items-end gap-1 lg:flex"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.8 }}
+        animate={loaderDone ? { opacity: 1 } : {}}
+        transition={{ duration: 1, delay: 1.6 }}
       >
-        <span className="text-[9px] uppercase tracking-[0.35em] text-muted-foreground">
+        <span className="text-[9px] uppercase tracking-[0.35em] text-foreground/60">
           {t.hero.hoursLabel}
         </span>
         <span className="text-[11px] tracking-[0.2em] text-primary">20:00 — 03:00</span>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter, Cormorant_Garamond } from "next/font/google";
+import { Playfair_Display, Inter, Cormorant_Garamond, Anton } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { SITE } from "@/lib/constants";
@@ -24,6 +24,13 @@ const cormorant = Cormorant_Garamond({
   weight: ["300", "400", "500", "600"],
   display: "swap",
   style: ["normal", "italic"],
+});
+
+const anton = Anton({
+  variable: "--font-anton",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -115,7 +122,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${playfair.variable} ${inter.variable} ${cormorant.variable} antialiased bg-background text-foreground`}
+        className={`${playfair.variable} ${inter.variable} ${cormorant.variable} ${anton.variable} antialiased bg-background text-foreground`}
       >
         {children}
         <Toaster />
