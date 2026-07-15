@@ -51,19 +51,21 @@ export function VoicesSection() {
       </div>
 
       {/* Marquee row */}
-      <div className="relative mt-16">
+      <div className="group/marquee relative mt-16 overflow-hidden">
         {/* edge fades */}
         <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-16 bg-gradient-to-r from-[#0c0c0c] to-transparent sm:w-32" />
         <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-16 bg-gradient-to-l from-[#0c0c0c] to-transparent sm:w-32" />
 
         <motion.div
-          className="flex w-max gap-5"
+          className="flex w-max gap-8 pr-8"
           animate={{ x: ["0%", "-50%"] }}
           transition={{
-            duration: 38,
+            duration: 48,
             ease: "linear",
             repeat: Infinity,
           }}
+          // pause on hover for readability
+          whileHover="paused"
         >
           {marquee.map((t, i) => (
             <TestimonialCard key={i} t={t} index={i % TESTIMONIALS.length} />
@@ -82,7 +84,7 @@ function TestimonialCard({
   index: number;
 }) {
   return (
-    <article className="group relative w-[88vw] shrink-0 overflow-hidden rounded-sm border border-border/30 bg-[#0a0a0a]/80 p-7 backdrop-blur sm:w-[400px]">
+    <article className="group relative w-[86vw] shrink-0 overflow-hidden rounded-sm border border-border/30 bg-[#0a0a0a]/80 p-8 backdrop-blur sm:w-[420px]">
       <div className="pointer-events-none absolute -right-6 -top-6 text-primary/10">
         <Quote className="size-24" fill="currentColor" />
       </div>

@@ -3,16 +3,17 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, ArrowRight, Check, Loader2 } from "lucide-react";
-import { useT } from "@/lib/lang-store";
+import { useT, useLangStore } from "@/lib/lang-store";
 import { fadeUp, staggerFast, viewportOnce } from "@/lib/motion";
 
 export function NewsletterSection() {
   const t = useT();
+  const lang = useLangStore((s) => s.lang);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [error, setError] = useState("");
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError(t.newsletter.error);
@@ -21,11 +22,24 @@ export function NewsletterSection() {
     }
     setError("");
     setStatus("loading");
-    // Simulate subscription (would POST to /api/newsletter in production)
-    setTimeout(() => {
+    try {
+      const res = await fetch("/api/newsletter?XTransformPort=3000", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, lang }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        setError(t.newsletter.error);
+        setStatus("error");
+        return;
+      }
       setStatus("done");
       setEmail("");
-    }, 900);
+    } catch {
+      setError(t.newsletter.error);
+      setStatus("error");
+    }
   };
 
   return (

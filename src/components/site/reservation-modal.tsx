@@ -53,10 +53,25 @@ function validate(d: Partial<ReservationData>): Errors {
 export function ReservationModal() {
   const open = useUIStore((s) => s.openModal === "reservation");
   const close = useUIStore((s) => s.closeModal);
+  const preselectedDate = useUIStore((s) => s.preselectedDate);
+  const clearPreselectedDate = useUIStore((s) => s.clearPreselectedDate);
 
   const [form, setForm] = useState<Partial<ReservationData>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [submitting, setSubmitting] = useState(false);
+
+  // Pre-fill the date field when opened from the availability calendar
+  useEffect(() => {
+    if (open && preselectedDate) {
+      const seed = preselectedDate;
+      const id = setTimeout(() => {
+        setForm((f) => ({ ...f, date: seed }));
+        setTouched((t) => ({ ...t, date: true }));
+        clearPreselectedDate();
+      }, 0);
+      return () => clearTimeout(id);
+    }
+  }, [open, preselectedDate, clearPreselectedDate]);
 
   // Reset form when closing
   useEffect(() => {

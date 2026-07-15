@@ -2,24 +2,26 @@
 
 import { useEffect } from "react";
 import { Languages } from "lucide-react";
-import { useLangStore } from "@/lib/lang-store";
+import { useLangStore, hydrateLang } from "@/lib/lang-store";
 import { cn } from "@/lib/utils";
 
 /**
- * Compact ES/EN pill toggle. Sits in the navbar. Persists choice via the
- * lang store (localStorage) and updates <html lang> automatically.
+ * Compact ES/EN pill toggle. Sits in the navbar. Resolves the active
+ * language from ?lang= URL query → localStorage → default "es", and
+ * syncs the choice back to both the URL and localStorage.
  */
 export function LanguageToggle({ className }: { className?: string }) {
   const lang = useLangStore((s) => s.lang);
   const setLang = useLangStore((s) => s.setLang);
 
-  // hydrate from localStorage on mount
+  // hydrate from URL/localStorage on mount
   useEffect(() => {
-    const saved = window.localStorage.getItem("la-negra-lang");
-    if (saved === "es" || saved === "en") {
-      if (saved !== useLangStore.getState().lang) setLang(saved);
-    }
-  }, [setLang]);
+    hydrateLang();
+    // re-hydrate on browser back/forward (URL may carry a different ?lang=)
+    const onPop = () => hydrateLang();
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
 
   return (
     <div

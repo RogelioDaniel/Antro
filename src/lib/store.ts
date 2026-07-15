@@ -26,12 +26,16 @@ interface UIState {
 
   // Modals
   openModal: ModalKind;
-  openReservation: () => void;
+  openReservation: (preselectedDate?: string) => void;
   openVip: () => void;
   openDressCode: () => void;
   openPrivateEvents: () => void;
   openAvailability: () => void;
   closeModal: () => void;
+
+  // Pre-selected reservation date (passed from availability calendar)
+  preselectedDate: string | null;
+  clearPreselectedDate: () => void;
 
   // Mobile drawer
   mobileNavOpen: boolean;
@@ -53,12 +57,16 @@ export const useUIStore = create<UIState>((set) => ({
   setLoaderDone: (v) => set({ loaderDone: v }),
 
   openModal: null,
-  openReservation: () => set({ openModal: "reservation" }),
+  openReservation: (preselectedDate) =>
+    set({ openModal: "reservation", preselectedDate: preselectedDate ?? null }),
   openVip: () => set({ openModal: "vip" }),
   openDressCode: () => set({ openModal: "dresscode" }),
   openPrivateEvents: () => set({ openModal: "private-events" }),
   openAvailability: () => set({ openModal: "availability" }),
   closeModal: () => set({ openModal: null }),
+
+  preselectedDate: null,
+  clearPreselectedDate: () => set({ preselectedDate: null }),
 
   mobileNavOpen: false,
   setMobileNavOpen: (v) => set({ mobileNavOpen: v }),

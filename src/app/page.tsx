@@ -10,6 +10,7 @@ import { EventsSection } from "@/components/site/events-section";
 import { VoicesSection } from "@/components/site/voices-section";
 import { PrivateEventsSection } from "@/components/site/private-events-section";
 import { LocationSection } from "@/components/site/location-section";
+import { BlogSection } from "@/components/site/blog-section";
 import { NewsletterSection } from "@/components/site/newsletter-section";
 import { SiteFooter } from "@/components/site/site-footer";
 import { FloatingWhatsApp } from "@/components/site/floating-whatsapp";
@@ -40,6 +41,8 @@ export default function Home() {
         <PrivateEventsSection />
         <SectionDivider label="Find Us" />
         <LocationSection />
+        <SectionDivider label="The Journal" />
+        <BlogSection />
         <NewsletterSection />
       </main>
       <SiteFooter />

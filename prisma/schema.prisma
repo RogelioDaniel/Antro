@@ -41,3 +41,11 @@ model ReservationDay {
   note      String?
   updatedAt DateTime @updatedAt
 }
+
+/// Newsletter subscribers for the "Inner Circle" list.
+model Subscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  lang      String   @default("es")
+  createdAt DateTime @default(now())
+}

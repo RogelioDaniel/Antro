@@ -87,7 +87,7 @@ export function AvailabilityModal() {
   const onReserve = () => {
     if (!selected) return;
     close();
-    setTimeout(openReservation, 150);
+    setTimeout(() => openReservation(selected), 150);
   };
 
   return (

@@ -70,6 +70,8 @@ export function GallerySection() {
         {/* Filters */}
         <motion.div
           className="mt-10 flex flex-wrap justify-center gap-2"
+          role="radiogroup"
+          aria-label={t.gallery.h2}
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={viewportOnce}
@@ -79,9 +81,10 @@ export function GallerySection() {
             <button
               key={f}
               onClick={() => setFilter(f)}
-              aria-pressed={filter === f}
+              role="radio"
+              aria-checked={filter === f}
               className={cn(
-                "relative min-h-[40px] rounded-full border px-5 py-2 text-[10px] uppercase tracking-[0.25em] transition-all",
+                "relative min-h-[44px] rounded-full border px-5 py-2 text-[10px] uppercase tracking-[0.25em] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
                 filter === f
                   ? "border-primary bg-primary/10 text-primary"
                   : "border-border/40 text-muted-foreground hover:border-primary/50 hover:text-foreground"

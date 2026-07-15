@@ -411,3 +411,52 @@ export const PRIVATE_EVENTS: PrivateEventOption[] = [
     capacity: "15 — 50",
   },
 ];
+
+export interface BlogPost {
+  id: string;
+  /** key into BLOG_TITLES / BLOG_EXCERPTS in i18n */
+  titleKey: string;
+  excerptKey: string;
+  category: string;
+  date: string; // ISO
+  day: string;
+  month: string;
+  readingTime: number;
+  image: string;
+}
+
+export const BLOG_POSTS: BlogPost[] = [
+  {
+    id: "origen-del-mezcal",
+    titleKey: "mezcalOrigin",
+    excerptKey: "mezcalOriginEx",
+    category: "Mezcal",
+    date: "2024-10-15",
+    day: "15",
+    month: "OCT",
+    readingTime: 6,
+    image: "/images/gallery/g1.png",
+  },
+  {
+    id: "noche-roma-condesa",
+    titleKey: "romaNight",
+    excerptKey: "romaNightEx",
+    category: "CDMX",
+    date: "2024-10-08",
+    day: "08",
+    month: "OCT",
+    readingTime: 4,
+    image: "/images/gallery/g2.png",
+  },
+  {
+    id: "mixologia-de-autor",
+    titleKey: "mixology",
+    excerptKey: "mixologyEx",
+    category: "Mixología",
+    date: "2024-09-28",
+    day: "28",
+    month: "SEP",
+    readingTime: 5,
+    image: "/images/gallery/g5.png",
+  },
+];

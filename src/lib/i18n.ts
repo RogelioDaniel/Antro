@@ -92,6 +92,16 @@ export interface Dict {
     error: string;
     micro: string;
   };
+  blog: {
+    eyebrow: string;
+    h2: string;
+    sub: string;
+    readMore: string;
+    minRead: string;
+    titles: Record<string, string>;
+    excerpts: Record<string, string>;
+    viewAll: string;
+  };
   footer: {
     tagline: string;
     nav: string;
@@ -265,6 +275,24 @@ const es: Dict = {
     success: "Bienvenido al círculo. Revisa tu correo.",
     error: "Email inválido",
     micro: "Sin spam · Cancela cuando quieras",
+  },
+  blog: {
+    eyebrow: "El Diario",
+    h2: "Desde La Negra",
+    sub: "Crónicas de mezcal, noche y cantina. Historias de la Roma-Condesa.",
+    readMore: "Leer",
+    minRead: "min",
+    viewAll: "Ver todo el diario",
+    titles: {
+      mezcalOrigin: "El origen del mezcal de pueblo",
+      romaNight: "Una noche en la Roma-Condesa",
+      mixology: "Mixología de autor: el oficio del cóctel",
+    },
+    excerpts: {
+      mezcalOrigin: "Del corazón de agave a la copa. Un viaje a la sierra de Oaxaca con el maestro mezcalero que destila nuestro espíritu de pueblo.",
+      romaNight: "Por qué la Roma-Condesa es el corazón nocturno de la CDMX, y cómo La Negra se convirtió en su cantina de autor.",
+      mixology: "Detrás de cada cóctel hay una historia. Te contamos cómo nació La Negra Tónica y por qué el humo lo cambia todo.",
+    },
   },
   footer: {
     tagline: "El origen de la noche mexicana.",
@@ -462,6 +490,24 @@ const en: Dict = {
     success: "Welcome to the circle. Check your inbox.",
     error: "Invalid email",
     micro: "No spam · Cancel anytime",
+  },
+  blog: {
+    eyebrow: "The Journal",
+    h2: "From La Negra",
+    sub: "Chronicles of mezcal, night and cantina. Stories from Roma-Condesa.",
+    readMore: "Read",
+    minRead: "min",
+    viewAll: "View the full journal",
+    titles: {
+      mezcalOrigin: "The origin of single-village mezcal",
+      romaNight: "A night in Roma-Condesa",
+      mixology: "Signature mixology: the craft of the cocktail",
+    },
+    excerpts: {
+      mezcalOrigin: "From the heart of agave to the glass. A journey to the Oaxaca mountains with the master mezcalero who distills our village spirit.",
+      romaNight: "Why Roma-Condesa is the nocturnal heart of CDMX, and how La Negra became its author cantina.",
+      mixology: "Behind every cocktail is a story. We tell you how La Negra Tónica was born and why smoke changes everything.",
+    },
   },
   footer: {
     tagline: "The origin of the Mexican night.",
