@@ -88,16 +88,25 @@ export function MenuSection() {
             <img
               src={section.image}
               alt={section.label}
-              className="aspect-[4/5] w-full object-cover lg:aspect-[3/4]"
+              className="aspect-[4/5] w-full object-cover transition-transform duration-700 hover:scale-105 lg:aspect-[3/4]"
               loading="lazy"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/80 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-[#0a0a0a]/20 to-transparent" />
+            {/* decorative corner ornament */}
+            <div className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-primary/40 bg-[#0a0a0a]/70 backdrop-blur">
+              <span className="font-serif-display text-[11px] text-primary">
+                {section.category === "mezcal" ? "M" : section.category === "cocktails" ? "C" : "G"}
+              </span>
+            </div>
             <div className="absolute bottom-0 left-0 p-6">
               <span className="text-[10px] uppercase tracking-[0.35em] text-primary">
                 {section.eyebrow}
               </span>
               <p className="mt-1 font-serif-display text-2xl text-foreground">
                 {section.label}
+              </p>
+              <p className="mt-1 text-[11px] text-muted-foreground">
+                {section.items.length} {section.items.length === 1 ? "selection" : "selections"}
               </p>
             </div>
           </motion.div>
@@ -114,12 +123,18 @@ export function MenuSection() {
                 variants={staggerFast}
                 transition={{ staggerChildren: 0.06 }}
               >
-                {section.items.map((item) => (
+                {section.items.map((item, idx) => (
                   <motion.li
                     key={item.name}
                     variants={fadeUp}
-                    className="group -mx-3 cursor-default rounded-sm px-3 py-4 transition-colors hover:bg-[#121212]"
+                    className="group relative -mx-3 cursor-default overflow-hidden rounded-sm px-3 py-4 transition-colors hover:bg-[#121212]"
                   >
+                    {/* left gold accent bar that draws in on hover */}
+                    <span className="absolute left-0 top-1/2 h-0 w-[2px] -translate-y-1/2 bg-primary transition-all duration-500 group-hover:h-[70%]" />
+                    {/* ornamental number */}
+                    <span className="pointer-events-none absolute right-2 top-2 font-serif-display text-2xl text-primary/[0.04] transition-colors group-hover:text-primary/[0.08]">
+                      {String(idx + 1).padStart(2, "0")}
+                    </span>
                     <div className="flex items-baseline">
                       <h3 className="font-serif-display text-lg text-foreground transition-colors group-hover:text-primary sm:text-xl">
                         {item.name}
@@ -130,11 +145,11 @@ export function MenuSection() {
                         </span>
                       )}
                       <span className="menu-leader" aria-hidden="true" />
-                      <span className="font-serif-display text-lg text-primary sm:text-xl">
+                      <span className="font-serif-display text-lg text-primary transition-transform group-hover:scale-105 origin-right sm:text-xl">
                         {item.price}
                       </span>
                     </div>
-                    <p className="mt-1.5 text-[13px] font-light leading-relaxed text-muted-foreground">
+                    <p className="mt-1.5 pl-1 text-[13px] font-light leading-relaxed text-muted-foreground">
                       {item.description}
                     </p>
                   </motion.li>

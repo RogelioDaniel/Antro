@@ -53,16 +53,53 @@ export async function POST(req: Request) {
 }
 
 /**
- * GET /api/reservations?XTransformPort=3000
- * Returns recent reservations (most recent 50). Useful for a future admin view.
+ * GET /api/reservations?XTransformPort=3000&status=pending|confirmed|cancelled
+ * Returns recent reservations (most recent 100), optionally filtered by status.
  */
-export async function GET() {
+export async function GET(req: Request) {
   try {
+    const url = new URL(req.url);
+    const status = url.searchParams.get("status");
+    const where = status && ["pending", "confirmed", "cancelled"].includes(status)
+      ? { status }
+      : {};
     const reservations = await db.reservation.findMany({
+      where,
       orderBy: { createdAt: "desc" },
-      take: 50,
+      take: 100,
     });
     return NextResponse.json({ ok: true, reservations });
+  } catch (e) {
+    return NextResponse.json(
+      { ok: false, error: (e as Error).message },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * PATCH /api/reservations?XTransformPort=3000
+ * Body: { id, status: "pending"|"confirmed"|"cancelled" }
+ * Updates a reservation's status (admin action).
+ */
+export async function PATCH(req: Request) {
+  try {
+    const body = await req.json().catch(() => ({}));
+    const id: string = (body?.id ?? "").trim();
+    const status: string = (body?.status ?? "").trim();
+    if (!id)
+      return NextResponse.json({ ok: false, error: "id required" }, { status: 400 });
+    if (!["pending", "confirmed", "cancelled"].includes(status))
+      return NextResponse.json(
+        { ok: false, error: "Invalid status" },
+        { status: 400 }
+      );
+
+    const updated = await db.reservation.update({
+      where: { id },
+      data: { status },
+    });
+    return NextResponse.json({ ok: true, reservation: updated });
   } catch (e) {
     return NextResponse.json(
       { ok: false, error: (e as Error).message },

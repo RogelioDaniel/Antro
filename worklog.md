@@ -388,3 +388,62 @@ Task: Assess project status, QA via agent-browser, add reservation persistence, 
 5. **Performance audit** — Lighthouse pass; convert `<img>` to `next/image` for automatic optimization + lazy loading; consider preloading the hero.
 6. **Cookie consent granularity** — add a "Manage preferences" modal with toggles for analytics vs marketing cookies (full LFPDPPP compliance).
 7. **Sitemap.xml + robots.txt** — dynamic sitemap including blog articles for search engine discovery.
+
+---
+Task ID: cron-review-5 (webDevReview round 5)
+Agent: main (Z.ai Code) — cron-triggered
+Task: Assess project status, QA via agent-browser, add sitemap/robots, blog index page, admin reservations view, menu richness.
+
+## Current Project Status (assessment)
+- Round 4 added reservation persistence, cookie consent, blog detail pages, blog JSON-LD. Project stable, lint clean.
+- VLM audit identified: no blog index page, menu section feels plain/text-heavy, no admin reservations view, no sitemap/robots.
+- No bugs found; this round focused on the 4 highest-impact feature additions from the round-4 recommendations.
+
+## QA Performed (agent-browser)
+- Sitemap.xml: GET /sitemap.xml returns valid XML with home + /blog + 3 blog detail URLs (lastmod + changefreq + priority). ✓
+- Robots.txt: GET /robots.txt allows all, disallows /admin + /api, points to sitemap. ✓
+- Blog index page: GET /blog renders with 3 articles (first is featured spanning full width with large hero image), bilingual, "View all" link from home teaser now navigates to /blog. Card click navigates to detail page. ✓
+- Admin reservations view: GET /admin/reservations shows PIN gate → entered "LANEGRA" → dashboard loaded with 3 reservations (seeded 2 + 1 from prior round). Filter tabs show counts (3 pending). Clicked Confirm on Sofía's reservation → status changed, counts updated (2 pending, 1 confirmed), verified in DB via groupBy. ✓
+- Menu section: enhanced with hover gold accent bars, ornamental numbers, image zoom, category corner ornament, selection count. VLM rates rich/editorial 7/10.
+- Final full-page VLM: overall polish 8/10.
+
+## Completed Modifications
+### New features added
+1. **Dynamic sitemap.xml** (`src/app/sitemap.ts`) — MetadataRoute.Sitemap including home (priority 1), /blog (0.8), and all 3 blog detail pages (0.7) with lastmod dates from post data. Served at /sitemap.xml.
+2. **Dynamic robots.txt** (`src/app/robots.ts`) — allows all crawlers, disallows /admin + /api, declares host + sitemap URL. Removed the static public/robots.txt to avoid conflict. Served at /robots.txt.
+3. **Blog index page** (`/blog`):
+   - `src/app/blog/page.tsx`: server component with metadata + JSON-LD `Blog` schema (name, description, url, publisher).
+   - `src/components/site/blog-index-view.tsx`: client view — hero header (eyebrow + serif h1 + sub), editorial grid with **featured first post** (md:col-span-2, larger 21/9 image, "Featured" badge), 2 standard cards (16/10), date badges, category chips, reading times, hover gold top-accent, "Back to home" link. Bilingual.
+   - `blog-section.tsx`: "View all" converted from `<button>` to `<Link href="/blog">` with arrow icon.
+4. **Admin reservations dashboard** (`/admin/reservations`):
+   - `src/app/api/reservations/route.ts`: enhanced GET with `?status=` filtering (pending/confirmed/cancelled) + take 100; new PATCH handler for `{ id, status }` status updates.
+   - `src/components/site/admin-reservations-view.tsx`: PIN-gated client view (PIN "LANEGRA", session-persisted via sessionStorage). Dashboard: header with Refresh + Lock buttons, filter tabs (All/Pending/Confirmed/Cancelled) with live counts, reservation cards showing name + status badge + date/time/guests/phone + notes + folio + timestamp, Confirm/Cancel/Reopen action buttons with loading states. Cinematic dark theme matching the site.
+   - `src/app/admin/reservations/page.tsx`: route with noindex metadata.
+
+### Styling refinements (mandatory)
+- **Menu section richness**: each item now has a left gold accent bar that draws in on hover (h-0 → h-[70%]), an ornamental number watermark (01-05, primary/[0.04] → /[0.08] on hover), price scales up on hover (group-hover:scale-105), description indented with pl-1.
+- **Menu visual panel**: image zooms on hover (scale-105), stronger gradient overlay (from-/90 via-/20), decorative corner ornament (gold-bordered circle with category letter M/C/G), added selection count below label.
+- **Admin dashboard**: glass-panel PIN gate with Lock icon, gold-bordered inputs, status badges with colored dots, reservation cards with hover border glow, folio in mono font.
+
+### Bug fixes
+- None this round.
+
+## Verification Results
+- `bun run lint` → 0 errors, 0 warnings.
+- dev.log → clean compiles, GET / 200, GET /sitemap.xml 200, GET /robots.txt 200, GET /blog 200, GET /admin/reservations 200, PATCH /api/reservations 200, zero runtime errors.
+- agent-browser end-to-end: sitemap + robots valid ✓, blog index renders 3 articles with featured layout ✓, blog card navigation ✓, admin PIN gate → dashboard → confirm action → DB verified (1 confirmed, 2 pending) ✓.
+- VLM audits: blog index featured card confirmed, admin dashboard (cards + filters + actions) confirmed 8/10, menu rich/editorial 7/10, overall polish 8/10.
+
+## Unresolved Issues / Risks
+- None blocking. The admin PIN gate is a demo-only client-side check (not real auth) — appropriate for a portfolio/demo but would need NextAuth or similar for production.
+- The admin reservations view is intentionally not linked from the public site (discoverable only via direct URL + PIN).
+- Menu hover states aren't visible in static VLM screenshots (they require interaction) — verified via code review + DOM inspection.
+
+## Priority Recommendations for Next Phase
+1. **Real Spotify playlist** — replace the placeholder playlist ID with a curated La Negra brand playlist (still the only unbuilt item from earlier recommendations).
+2. **Admin availability management** — extend the admin area with a calendar editor to set real per-night availability instead of the deterministic seeder.
+3. **Cookie consent granularity** — add a "Manage preferences" modal with toggles for analytics vs marketing cookies (full LFPDPPP compliance).
+4. **next/image optimization** — convert remaining `<img>` tags to `next/image` for automatic format conversion + responsive sizing.
+5. **Blog CMS** — move blog articles to a Prisma `Article` model with a rich-text editor.
+6. **Performance audit** — Lighthouse pass; preload hero image, lazy-load below-the-fold.
+7. **Real auth** — replace the admin PIN gate with NextAuth.js (credentials or magic-link) for production-grade protection.
