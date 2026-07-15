@@ -1,0 +1,232 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-playfair);
+  --font-display: var(--font-cormorant);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/*
+  LA NEGRA — Cinematic Dark Mode Theme
+  The cantina is a nighttime experience. There is no light mode.
+  The :root IS the dark cinematic palette.
+*/
+:root {
+  --radius: 0.25rem;
+
+  /* Core surfaces */
+  --background: #0a0a0a;            /* Main background (Deep Black) */
+  --foreground: #f5f5f5;            /* Main text (Off-white) */
+  --card: #121212;                  /* Cards / sections */
+  --card-foreground: #f5f5f5;
+  --popover: #0f0f0f;
+  --popover-foreground: #f5f5f5;
+
+  /* Brand */
+  --primary: #c5a059;               /* Vintage Gold / Amber */
+  --primary-foreground: #0a0a0a;    /* Black text on gold */
+
+  /* Secondary surfaces */
+  --secondary: #121212;
+  --secondary-foreground: #f5f5f5;
+  --secondary-dark: #080808;
+
+  /* Muted */
+  --muted: #1a1a1a;
+  --muted-foreground: #a7a7a7;      /* Secondary text (Grey) */
+
+  /* Accent — Deep Wine Red */
+  --accent: #7a1f2b;
+  --accent-foreground: #f5f5f5;
+
+  /* States */
+  --destructive: #ef4444;
+  --success: #22c55e;
+  --border: rgba(197, 160, 89, 0.3); /* Subtle gold borders */
+  --border-dark: #333333;
+  --input: rgba(197, 160, 89, 0.18);
+  --ring: #c5a059;
+
+  /* Chart palette (cinematic) */
+  --chart-1: #c5a059;
+  --chart-2: #7a1f2b;
+  --chart-3: #a7a7a7;
+  --chart-4: #a6863e;
+  --chart-5: #f5f5f5;
+
+  /* Sidebar */
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #f5f5f5;
+  --sidebar-primary: #c5a059;
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: #121212;
+  --sidebar-accent-foreground: #f5f5f5;
+  --sidebar-border: rgba(197, 160, 89, 0.3);
+  --sidebar-ring: #c5a059;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: "ss01", "cv01";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  /* Cinematic custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(197, 160, 89, 0.3);
+    border-radius: 9999px;
+    border: 2px solid #0a0a0a;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(197, 160, 89, 0.6);
+  }
+  ::selection {
+    background: rgba(197, 160, 89, 0.3);
+    color: #f5f5f5;
+  }
+}
+
+@layer utilities {
+  /* Font helpers */
+  .font-serif-display {
+    font-family: var(--font-playfair), Georgia, serif;
+  }
+  .font-display-quote {
+    font-family: var(--font-cormorant), Georgia, serif;
+  }
+
+  /* Gold glow & cinematic effects */
+  .text-gold-glow {
+    text-shadow: 0 0 24px rgba(197, 160, 89, 0.45), 0 0 2px rgba(197, 160, 89, 0.6);
+  }
+  .gold-glow {
+    box-shadow: 0 0 40px rgba(197, 160, 89, 0.18), inset 0 0 0 1px rgba(197, 160, 89, 0.2);
+  }
+  .cinematic-grain {
+    position: relative;
+  }
+  .cinematic-grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .glass-panel {
+    background: rgba(18, 18, 18, 0.72);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border: 1px solid rgba(197, 160, 89, 0.22);
+  }
+  .dark-map {
+    filter: invert(90%) hue-rotate(180deg) brightness(0.8) contrast(0.8) grayscale(0.4);
+  }
+  .gold-gradient-text {
+    background: linear-gradient(135deg, #f0d68f 0%, #c5a059 45%, #a6863e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  /* Animated expanding underline used on nav links */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -4px;
+    height: 1px;
+    width: 0;
+    background: var(--primary);
+    transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1), left 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-underline:hover::after,
+  .link-underline[data-active="true"]::after {
+    width: 100%;
+    left: 0;
+  }
+  /* Dotted leader between menu name and price */
+  .menu-leader {
+    flex: 1;
+    border-bottom: 1px dotted rgba(197, 160, 89, 0.35);
+    margin: 0 0.75rem 0.35rem;
+    min-width: 1.5rem;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  @keyframes draw-line {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  @keyframes pulse-ring {
+    0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+    70% { box-shadow: 0 0 0 14px rgba(34, 197, 94, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+  }
+  .whatsapp-pulse {
+    animation: pulse-ring 2.4s cubic-bezier(0.66, 0, 0, 1) infinite;
+  }
+}
