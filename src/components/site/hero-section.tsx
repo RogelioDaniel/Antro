@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import Image from "next/image";
 import { ArrowDown } from "lucide-react";
 import { useUIStore } from "@/lib/store";
 import { useT } from "@/lib/lang-store";
@@ -50,11 +51,13 @@ export function HeroSection() {
         className="absolute inset-0 will-change-transform"
         style={{ y: bgY, scale: bgScale }}
       >
-        <img
+        <Image
           src="/images/hero-bg.png"
           alt="Interior de la cantina La Negra con luz dorada y botellas de mezcal"
-          className="h-full w-full object-cover"
-          fetchPriority="high"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
       </motion.div>
 

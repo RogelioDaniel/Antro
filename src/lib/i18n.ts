@@ -202,6 +202,17 @@ export interface Dict {
     accept: string;
     decline: string;
     link: string;
+    manage: string;
+    save: string;
+    modalTitle: string;
+    modalBody: string;
+    essential: string;
+    essentialDesc: string;
+    analytics: string;
+    analyticsDesc: string;
+    marketing: string;
+    marketingDesc: string;
+    essentialLocked: string;
   };
 }
 
@@ -450,6 +461,17 @@ const es: Dict = {
     accept: "Aceptar todo",
     decline: "Solo esenciales",
     link: "Política de privacidad",
+    manage: "Gestionar preferencias",
+    save: "Guardar preferencias",
+    modalTitle: "Preferencias de cookies",
+    modalBody: "Gestiona cómo usamos las cookies. Las esenciales siempre están activas.",
+    essential: "Esenciales",
+    essentialDesc: "Necesarias para el funcionamiento del sitio (sesión, idioma, reservaciones).",
+    analytics: "Analítica",
+    analyticsDesc: "Métricas anónimas de uso para mejorar la experiencia.",
+    marketing: "Marketing",
+    marketingDesc: "Píxeles de redes sociales para mostrar contenido relevante.",
+    essentialLocked: "Siempre activo",
   },
 };
 
@@ -698,6 +720,17 @@ const en: Dict = {
     accept: "Accept all",
     decline: "Essential only",
     link: "Privacy policy",
+    manage: "Manage preferences",
+    save: "Save preferences",
+    modalTitle: "Cookie preferences",
+    modalBody: "Manage how we use cookies. Essential cookies are always active.",
+    essential: "Essential",
+    essentialDesc: "Required for the site to function (session, language, reservations).",
+    analytics: "Analytics",
+    analyticsDesc: "Anonymous usage metrics to improve the experience.",
+    marketing: "Marketing",
+    marketingDesc: "Social pixels to show relevant content.",
+    essentialLocked: "Always active",
   },
 };
 

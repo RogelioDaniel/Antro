@@ -12,6 +12,7 @@ import {
   Users,
   Calendar,
   CalendarDays,
+  Download,
   Loader2,
   ArrowLeft,
   ShieldCheck,
@@ -239,6 +240,13 @@ export function AdminReservationsView() {
           >
             <CalendarDays className="size-3.5" />
             Availability
+          </a>
+          <a
+            href="/api/reservations/export?XTransformPort=3000"
+            className="inline-flex h-10 items-center gap-2 rounded-none border border-border/50 px-4 text-[10px] uppercase tracking-[0.2em] text-foreground/80 transition-colors hover:border-primary/50 hover:text-primary"
+          >
+            <Download className="size-3.5" />
+            CSV
           </a>
           <button
             onClick={load}
