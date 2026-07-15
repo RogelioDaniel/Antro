@@ -4,9 +4,11 @@ import { motion } from "framer-motion";
 import { MapPin, Clock, Navigation, ExternalLink } from "lucide-react";
 import { SITE } from "@/lib/constants";
 import { useUIStore } from "@/lib/store";
+import { useT } from "@/lib/lang-store";
 import { fadeUp, staggerFast, viewportOnce } from "@/lib/motion";
 
 export function LocationSection() {
+  const t = useT();
   return (
     <section
       id="location"
@@ -22,14 +24,14 @@ export function LocationSection() {
           variants={staggerFast}
         >
           <motion.span variants={fadeUp} className="text-[11px] uppercase tracking-[0.45em] text-primary">
-            Encuéntranos
+            {t.location.eyebrow}
           </motion.span>
           <motion.h2
             id="location-heading"
             variants={fadeUp}
             className="mt-4 font-serif-display text-[clamp(2rem,5.5vw,4rem)] font-medium leading-[1.05] text-foreground"
           >
-            Location &amp; Hours
+            {t.location.h2}
           </motion.h2>
         </motion.div>
 
@@ -72,19 +74,19 @@ export function LocationSection() {
             <div className="space-y-8">
               <motion.div variants={fadeUp} className="border-l border-primary/40 pl-6">
                 <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-primary">
-                  <MapPin className="size-3.5" /> Dirección
+                  <MapPin className="size-3.5" /> {t.location.addressLabel}
                 </div>
                 <p className="mt-3 font-serif-display text-2xl leading-snug text-foreground">
-                  {SITE.address}
+                  {t.location.address}
                 </p>
               </motion.div>
 
               <motion.div variants={fadeUp} className="border-l border-primary/40 pl-6">
                 <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.35em] text-primary">
-                  <Clock className="size-3.5" /> Horario
+                  <Clock className="size-3.5" /> {t.location.hoursLabel}
                 </div>
                 <p className="mt-3 font-serif-display text-2xl text-foreground">
-                  {SITE.hoursLabel}
+                  {t.location.hours}
                 </p>
                 <p className="mt-1 text-[14px] tracking-[0.2em] text-muted-foreground">
                   20:00 — 03:00
@@ -98,17 +100,17 @@ export function LocationSection() {
               >
                 <div className="flex items-center justify-between">
                   <div className="text-[10px] uppercase tracking-[0.35em] text-primary">
-                    Dress Code
+                    {t.location.dressCode}
                   </div>
                   <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground transition-colors group-hover:text-primary">
-                    Ver →
+                    {t.location.dressCodeView}
                   </span>
                 </div>
                 <p className="mt-3 font-serif-display text-2xl text-foreground">
                   Smart Casual
                 </p>
                 <p className="mt-1 text-[13px] text-muted-foreground">
-                  Reservamos el derecho de admisión.
+                  {t.location.dressCodeNote}
                 </p>
               </motion.button>
             </div>
@@ -121,7 +123,7 @@ export function LocationSection() {
                 className="group inline-flex h-13 flex-1 items-center justify-center gap-2 bg-primary px-6 py-3.5 text-[11px] uppercase tracking-[0.25em] text-primary-foreground transition-all hover:bg-primary-dark hover:shadow-[0_0_30px_rgba(197,160,89,0.35)]"
               >
                 <Navigation className="size-4" />
-                Get Directions
+                {t.location.directions}
               </a>
               <a
                 href={SITE.wazeUrl}
@@ -129,7 +131,7 @@ export function LocationSection() {
                 rel="noopener noreferrer"
                 className="group inline-flex h-13 flex-1 items-center justify-center gap-2 border border-border/60 px-6 py-3.5 text-[11px] uppercase tracking-[0.25em] text-foreground transition-colors hover:border-primary hover:text-primary"
               >
-                Waze
+                {t.location.waze}
                 <ExternalLink className="size-3.5" />
               </a>
             </motion.div>

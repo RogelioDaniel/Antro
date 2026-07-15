@@ -4,10 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Download } from "lucide-react";
 import { MENU } from "@/lib/constants";
 import { useUIStore } from "@/lib/store";
+import { useT } from "@/lib/lang-store";
 import { fadeUp, staggerFast, viewportOnce, EASE_CINEMA } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 export function MenuSection() {
+  const t = useT();
   const activeTab = useUIStore((s) => s.activeTab);
   const setActiveTab = useUIStore((s) => s.setActiveTab);
   const section = MENU.find((m) => m.category === activeTab)!;
@@ -30,14 +32,14 @@ export function MenuSection() {
           variants={staggerFast}
         >
           <motion.span variants={fadeUp} className="text-[11px] uppercase tracking-[0.45em] text-primary">
-            La Carta
+            {t.menu.eyebrow}
           </motion.span>
           <motion.h2
             id="menu-heading"
             variants={fadeUp}
             className="mt-5 font-serif-display text-[clamp(2rem,5.5vw,4rem)] font-medium leading-[1.05] text-foreground"
           >
-            The Menu
+            {t.menu.h2}
           </motion.h2>
         </motion.div>
 
@@ -150,7 +152,7 @@ export function MenuSection() {
               transition={{ delay: 0.3 }}
             >
               <Download className="size-3.5" />
-              Download Full Menu (PDF)
+              {t.menu.download}
             </motion.a>
           </div>
         </div>

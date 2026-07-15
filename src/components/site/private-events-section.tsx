@@ -4,10 +4,13 @@ import { motion } from "framer-motion";
 import { Users, ArrowRight, Check } from "lucide-react";
 import { PRIVATE_EVENTS } from "@/lib/constants";
 import { useUIStore } from "@/lib/store";
+import { useT, useLangStore } from "@/lib/lang-store";
 import { fadeUp, staggerFast, viewportOnce } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
 
 export function PrivateEventsSection() {
+  const t = useT();
+  const lang = useLangStore((s) => s.lang);
   const openPrivateEvents = useUIStore((s) => s.openPrivateEvents);
 
   return (
@@ -29,21 +32,20 @@ export function PrivateEventsSection() {
         >
           <motion.div variants={fadeUp}>
             <span className="text-[11px] uppercase tracking-[0.45em] text-primary">
-              Eventos Privados
+              {t.privateEvents.eyebrow}
             </span>
             <h2
               id="private-events-heading"
               className="mt-4 font-serif-display text-[clamp(2rem,5.5vw,4rem)] font-medium leading-[1.05] text-foreground"
             >
-              Take Over <span className="gold-gradient-text italic">The Night</span>
+              {t.privateEvents.h2Line1} <span className="gold-gradient-text italic">{t.privateEvents.h2Line2}</span>
             </h2>
           </motion.div>
           <motion.p
             variants={fadeUp}
             className="max-w-md text-[14px] font-light leading-relaxed text-muted-foreground lg:justify-self-end"
           >
-            Cierres de negocio, cumpleaños, lanzamientos. Tres formatos para
-            hacer de La Negra el escenario de tu próxima historia.
+            {t.privateEvents.body}
           </motion.p>
         </motion.div>
 
@@ -94,7 +96,7 @@ export function PrivateEventsSection() {
                 onClick={openPrivateEvents}
                 className="group/btn mt-7 inline-flex items-center gap-1.5 self-start border-b border-primary/40 pb-1 text-[11px] uppercase tracking-[0.2em] text-primary transition-all hover:gap-3"
               >
-                Inquire
+                {t.privateEvents.inquire}
                 <ArrowRight className="size-3.5 transition-transform group-hover/btn:translate-x-0.5" />
               </button>
             </motion.article>
@@ -110,17 +112,17 @@ export function PrivateEventsSection() {
         >
           <div>
             <p className="font-serif-display text-xl text-foreground">
-              ¿Una idea diferente? Cuéntanos.
+              {t.privateEvents.ctaTitle}
             </p>
             <p className="mt-1 text-[13px] text-muted-foreground">
-              Diseñamos experiencias a la medida de tu noche.
+              {t.privateEvents.ctaBody}
             </p>
           </div>
           <Button
             onClick={openPrivateEvents}
             className="h-12 rounded-none bg-primary px-7 text-[11px] uppercase tracking-[0.25em] text-primary-foreground transition-all hover:bg-primary-dark hover:shadow-[0_0_30px_rgba(197,160,89,0.35)]"
           >
-            Solicitar Cotización
+            {t.privateEvents.ctaButton}
           </Button>
         </motion.div>
       </div>

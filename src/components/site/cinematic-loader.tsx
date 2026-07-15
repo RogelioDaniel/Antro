@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useUIStore } from "@/lib/store";
+import { useT } from "@/lib/lang-store";
 import { EASE_CINEMA } from "@/lib/motion";
 
 /**
@@ -14,6 +15,7 @@ import { EASE_CINEMA } from "@/lib/motion";
  * - Body scroll is locked while visible
  */
 export function CinematicLoader() {
+  const t = useT();
   const setLoaderDone = useUIStore((s) => s.setLoaderDone);
   const [show, setShow] = useState(true);
 
@@ -90,7 +92,7 @@ export function CinematicLoader() {
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 1.4, ease: EASE_CINEMA }}
             >
-              Cantina · CDMX
+              {t.loader.tagline}
             </motion.span>
           </motion.div>
 

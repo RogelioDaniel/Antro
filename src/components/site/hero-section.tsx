@@ -4,11 +4,12 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ArrowDown } from "lucide-react";
 import { useUIStore } from "@/lib/store";
+import { useT } from "@/lib/lang-store";
 import { EASE_CINEMA } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
-import { SITE } from "@/lib/constants";
 
 export function HeroSection() {
+  const t = useT();
   const ref = useRef<HTMLElement>(null);
   const openReservation = useUIStore((s) => s.openReservation);
   const openVip = useUIStore((s) => s.openVip);
@@ -59,7 +60,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.3, ease: EASE_CINEMA }}
         >
-          Roma-Condesa · CDMX
+          {t.hero.eyebrow}
         </motion.span>
 
         <motion.h1
@@ -68,9 +69,9 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 1.3, delay: 0.45, ease: EASE_CINEMA }}
         >
-          The origin of the
+          {t.hero.h1Line1}
           <br />
-          <span className="gold-gradient-text italic">Mexican night.</span>
+          <span className="gold-gradient-text italic">{t.hero.h1Line2}</span>
         </motion.h1>
 
         <motion.p
@@ -79,7 +80,7 @@ export function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.85, ease: EASE_CINEMA }}
         >
-          {SITE.subtitle}
+          {t.hero.subtitle}
         </motion.p>
 
         <motion.div
@@ -93,13 +94,13 @@ export function HeroSection() {
             size="lg"
             className="group h-13 rounded-none bg-primary px-9 py-6 text-[12px] uppercase tracking-[0.25em] text-primary-foreground transition-all hover:bg-primary-dark hover:shadow-[0_0_40px_rgba(197,160,89,0.4)]"
           >
-            Reserve a Table
+            {t.hero.ctaReserve}
           </Button>
           <button
             onClick={openVip}
             className="link-underline text-[12px] uppercase tracking-[0.25em] text-foreground/85 transition-colors hover:text-primary"
           >
-            Join VIP List
+            {t.hero.ctaVip}
           </button>
         </motion.div>
       </motion.div>
@@ -117,9 +118,9 @@ export function HeroSection() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1.6 }}
-        aria-label="Desplazarse hacia abajo"
+        aria-label={t.hero.scroll}
       >
-        <span className="text-[9px] uppercase tracking-[0.4em]">Scroll</span>
+        <span className="text-[9px] uppercase tracking-[0.4em]">{t.hero.scroll}</span>
         <motion.span
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
@@ -136,7 +137,7 @@ export function HeroSection() {
         transition={{ duration: 1, delay: 1.8 }}
       >
         <span className="text-[9px] uppercase tracking-[0.35em] text-muted-foreground">
-          {SITE.hoursLabel}
+          {t.hero.hoursLabel}
         </span>
         <span className="text-[11px] tracking-[0.2em] text-primary">20:00 — 03:00</span>
       </motion.div>

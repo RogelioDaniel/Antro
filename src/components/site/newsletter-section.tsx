@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, ArrowRight, Check, Loader2 } from "lucide-react";
+import { useT } from "@/lib/lang-store";
 import { fadeUp, staggerFast, viewportOnce } from "@/lib/motion";
 
 export function NewsletterSection() {
+  const t = useT();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [error, setError] = useState("");
@@ -13,7 +15,7 @@ export function NewsletterSection() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError("Email inválido");
+      setError(t.newsletter.error);
       setStatus("error");
       return;
     }
@@ -52,14 +54,13 @@ export function NewsletterSection() {
             variants={fadeUp}
             className="font-serif-display text-[clamp(1.6rem,4vw,2.6rem)] font-medium leading-tight text-foreground"
           >
-            Join the Inner Circle
+            {t.newsletter.h2}
           </motion.h2>
           <motion.p
             variants={fadeUp}
             className="mx-auto mt-3 max-w-md text-[13px] font-light leading-relaxed text-muted-foreground"
           >
-            Eventos privados, lanzamientos de mezcal y noches secretas.
-            Solo para quienes saben dónde empieza la noche.
+            {t.newsletter.body}
           </motion.p>
         </motion.div>
 
@@ -80,7 +81,7 @@ export function NewsletterSection() {
                 setEmail(e.target.value);
                 if (status === "error") setStatus("idle");
               }}
-              placeholder="tu@email.com"
+              placeholder={t.newsletter.placeholder}
               aria-label="Email"
               className="h-12 w-full rounded-none border border-border/50 bg-[#0d0d0d] pl-11 pr-4 text-[14px] text-foreground placeholder:text-muted-foreground/60 focus:border-primary/60 focus:outline-none focus:ring-1 focus:ring-primary/30"
             />
@@ -94,11 +95,11 @@ export function NewsletterSection() {
               <Loader2 className="size-4 animate-spin" />
             ) : status === "done" ? (
               <>
-                <Check className="size-4" /> Suscrito
+                <Check className="size-4" /> {t.newsletter.button === "Suscribir" ? "Suscrito" : "Subscribed"}
               </>
             ) : (
               <>
-                Suscribir
+                {t.newsletter.button}
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
               </>
             )}
@@ -126,14 +127,14 @@ export function NewsletterSection() {
                 exit={{ opacity: 0 }}
                 className="text-[12px] text-primary"
               >
-                Bienvenido al círculo. Revisa tu correo.
+                {t.newsletter.success}
               </motion.p>
             )}
           </AnimatePresence>
         </div>
 
         <p className="mt-2 text-[10px] uppercase tracking-[0.25em] text-muted-foreground/60">
-          Sin spam · Cancela cuando quieras
+          {t.newsletter.micro}
         </p>
       </div>
     </section>

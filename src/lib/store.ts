@@ -11,6 +11,7 @@ export type ModalKind =
   | "vip"
   | "dresscode"
   | "private-events"
+  | "availability"
   | null;
 
 export interface LightboxState {
@@ -29,6 +30,7 @@ interface UIState {
   openVip: () => void;
   openDressCode: () => void;
   openPrivateEvents: () => void;
+  openAvailability: () => void;
   closeModal: () => void;
 
   // Mobile drawer
@@ -55,6 +57,7 @@ export const useUIStore = create<UIState>((set) => ({
   openVip: () => set({ openModal: "vip" }),
   openDressCode: () => set({ openModal: "dresscode" }),
   openPrivateEvents: () => set({ openModal: "private-events" }),
+  openAvailability: () => set({ openModal: "availability" }),
   closeModal: () => set({ openModal: null }),
 
   mobileNavOpen: false,

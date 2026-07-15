@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Instagram, Music2, MapPin } from "lucide-react";
 import { SITE, NAV_LINKS } from "@/lib/constants";
+import { useT } from "@/lib/lang-store";
 import { fadeUp, staggerFast, viewportOnce } from "@/lib/motion";
 
 function scrollToId(id: string) {
@@ -13,6 +14,18 @@ function scrollToId(id: string) {
 }
 
 export function SiteFooter() {
+  const t = useT();
+  const navLabel = (id: string) =>
+    (
+      {
+        experience: t.nav.experience,
+        menu: t.nav.menu,
+        gallery: t.nav.gallery,
+        events: t.nav.events,
+        voices: t.nav.voices,
+        location: t.nav.location,
+      } as Record<string, string>
+    )[id] ?? id;
   return (
     <footer className="relative mt-auto border-t border-border/40 bg-[#070707] pt-20 pb-10">
       <div className="mx-auto max-w-7xl px-5 sm:px-8">
@@ -34,7 +47,7 @@ export function SiteFooter() {
               </span>
             </div>
             <p className="mt-5 max-w-xs text-[13px] font-light leading-relaxed text-muted-foreground">
-              {SITE.tagline} Author cantina in Roma-Condesa. Mezcal, mixology and
+              {t.footer.tagline} Author cantina in Roma-Condesa. Mezcal, mixology and
               high-end gastronomy.
             </p>
 
@@ -62,7 +75,7 @@ export function SiteFooter() {
           {/* Navigation */}
           <motion.div variants={fadeUp} className="md:justify-self-center">
             <h3 className="text-[10px] uppercase tracking-[0.35em] text-primary">
-              Navegación
+              {t.footer.nav}
             </h3>
             <ul className="mt-5 space-y-3">
               {NAV_LINKS.map((l) => (
@@ -71,7 +84,7 @@ export function SiteFooter() {
                     onClick={() => scrollToId(l.id)}
                     className="link-underline text-[13px] text-foreground/80 hover:text-foreground"
                   >
-                    {l.label}
+                    {navLabel(l.id)}
                   </button>
                 </li>
               ))}
@@ -81,21 +94,21 @@ export function SiteFooter() {
           {/* Legal + contact */}
           <motion.div variants={fadeUp} className="md:justify-self-end">
             <h3 className="text-[10px] uppercase tracking-[0.35em] text-primary">
-              La Casa
+              {t.footer.casa}
             </h3>
             <ul className="mt-5 space-y-3 text-[13px] text-foreground/80">
               <li>
-                <a href="#" className="link-underline">Privacy Policy</a>
+                <a href="#" className="link-underline">{t.footer.privacy}</a>
               </li>
               <li>
-                <a href="#" className="link-underline">Términos</a>
+                <a href="#" className="link-underline">{t.footer.terms}</a>
               </li>
               <li>
-                <a href="#" className="link-underline">Dress Code</a>
+                <a href="#" className="link-underline">{t.footer.dressCode}</a>
               </li>
               <li className="flex items-start gap-2 pt-2 text-muted-foreground">
                 <MapPin className="mt-0.5 size-3.5 shrink-0 text-primary/70" />
-                <span>{SITE.address}</span>
+                <span>{t.location.address}</span>
               </li>
               <li className="text-muted-foreground">
                 <a href={`tel:${SITE.phone}`} className="link-underline">
@@ -116,10 +129,10 @@ export function SiteFooter() {
         {/* Bottom bar */}
         <div className="mt-8 flex flex-col items-center justify-between gap-3 border-t border-border/30 pt-6 sm:flex-row">
           <p className="text-[11px] tracking-wide text-muted-foreground">
-            © {new Date().getFullYear()} La Negra. Made with mezcal in CDMX.
+            © {new Date().getFullYear()} La Negra. {t.footer.copyright}
           </p>
           <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground/70">
-            Beber con moderación · 18+
+            {t.footer.age}
           </p>
         </div>
       </div>

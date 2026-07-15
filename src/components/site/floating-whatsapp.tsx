@@ -5,20 +5,19 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
 import { generateWhatsAppLink } from "@/lib/whatsapp";
 import { SITE } from "@/lib/constants";
-
-const DEFAULT_MSG =
-  "Hola La Negra, me gustaría información sobre reservaciones y la lista VIP.";
+import { useT } from "@/lib/lang-store";
 
 export function FloatingWhatsApp() {
+  const t = useT();
   const [show, setShow] = useState(false);
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
   useEffect(() => {
-    const t = setTimeout(() => setShow(true), 2800);
+    const t1 = setTimeout(() => setShow(true), 2800);
     const t2 = setTimeout(() => setTooltipOpen(true), 5200);
     const t3 = setTimeout(() => setTooltipOpen(false), 11000);
     return () => {
-      clearTimeout(t);
+      clearTimeout(t1);
       clearTimeout(t2);
       clearTimeout(t3);
     };
@@ -52,10 +51,10 @@ export function FloatingWhatsApp() {
                   <X className="size-3" />
                 </button>
                 <p className="text-[12px] leading-snug text-foreground">
-                  ¿Reservaciones o lista VIP?
+                  {t.whatsapp.tooltipTitle}
                 </p>
                 <p className="mt-0.5 text-[11px] text-muted-foreground">
-                  Escríbenos, respondemos rápido.
+                  {t.whatsapp.tooltipBody}
                 </p>
               </motion.div>
             )}
@@ -63,7 +62,7 @@ export function FloatingWhatsApp() {
 
           {/* WhatsApp button */}
           <a
-            href={generateWhatsAppLink(DEFAULT_MSG)}
+            href={generateWhatsAppLink(t.whatsapp.defaultMsg)}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Contactar por WhatsApp"

@@ -3,9 +3,11 @@
 import { motion } from "framer-motion";
 import { Quote, Star } from "lucide-react";
 import { TESTIMONIALS } from "@/lib/constants";
+import { useT, useLangStore } from "@/lib/lang-store";
 import { fadeUp, staggerFast, viewportOnce } from "@/lib/motion";
 
 export function VoicesSection() {
+  const t = useT();
   // duplicate for a seamless marquee loop
   const marquee = [...TESTIMONIALS, ...TESTIMONIALS];
 
@@ -28,21 +30,21 @@ export function VoicesSection() {
           variants={staggerFast}
         >
           <motion.span variants={fadeUp} className="text-[11px] uppercase tracking-[0.45em] text-primary">
-            Voces de la noche
+            {t.voices.eyebrow}
           </motion.span>
           <motion.h2
             id="voices-heading"
             variants={fadeUp}
             className="mt-4 font-serif-display text-[clamp(2rem,5.5vw,4rem)] font-medium leading-[1.05] text-foreground"
           >
-            What They Say
+            {t.voices.h2}
           </motion.h2>
           <motion.div variants={fadeUp} className="mt-5 flex items-center gap-1.5">
             {Array.from({ length: 5 }).map((_, i) => (
               <Star key={i} className="size-4 fill-primary text-primary" />
             ))}
             <span className="ml-2 text-[12px] uppercase tracking-[0.25em] text-muted-foreground">
-              4.9 · 320+ reseñas
+              {t.voices.rating}
             </span>
           </motion.div>
         </motion.div>

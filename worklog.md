@@ -188,3 +188,66 @@ Task: Assess project status, QA via agent-browser, fix bugs, add new features an
 5. **SEO blog teaser** — a 3-card "Diario" teaser section linking to future long-form content.
 6. **Marquee polish** — tune testimonial marquee gap/width for a 10/10 spacing score.
 7. **Private events availability check** — date picker that greys out already-booked dates.
+
+---
+Task ID: cron-review-2 (webDevReview round 2)
+Agent: main (Z.ai Code) — cron-triggered
+Task: Assess project status, QA via agent-browser, add ES/EN i18n, gallery filter, availability calendar, Spotify embed.
+
+## Current Project Status (assessment)
+- Round 1 added Gallery/Voices/Private Events/Newsletter/Dress Code + section dividers. Project was stable, lint clean, no console errors on load.
+- VLM audit identified 4 gaps: no language toggle, no gallery category filters, no music embed, no reservations calendar with availability.
+- No bugs found; this round focused on the 4 highest-impact feature additions + full i18n.
+
+## QA Performed (agent-browser)
+- Loaded `/`, waited through loader, zero console errors / zero page errors (only cosmetic framer-motion warning).
+- Language toggle: clicked EN → nav labels switched to Experience/Menu/Gallery/Events/Voices, hero H1 → "The origin of the Mexican night.", menu download → "DOWNLOAD FULL MENU (PDF)". Switched back to ES → "El origen de la noche mexicana." ✓
+- Gallery filter: clicked "The Craft" → image count went 8 → 3 (correctly filtered to craft-category images). ✓
+- Availability calendar: opened from navbar calendar icon → modal fetched /api/availability → rendered Jul/Aug/Sep 2026 night tiles (Thu/Fri/Sat only) with seat counts + full/limited/open states. Selected "Thu Jul 16" → "SELECTED · OPEN · 63 · RESERVE A TABLE" panel appeared with enabled button. ✓
+- Ambient player: clicked play (Reproducir) → Spotify iframe mounted (1 iframe), button toggled to Pausar, vinyl disc started spinning. ✓
+- Prisma verified via dev.log: SELECT + INSERT (seed) + COMMIT + re-SELECT queries executing correctly against ReservationDay table.
+
+## Completed Modifications
+### New features added
+1. **ES/EN i18n system** — full bilingual support:
+   - `src/lib/i18n.ts`: complete `Dict` type + `es`/`en` dictionaries covering every section (nav, hero, experience, menu, gallery, events, voices, private events, location, newsletter, footer) + all 5 modals (reserve, vip, dresscode, private-events, availability) + whatsapp tooltip/loader.
+   - `src/lib/lang-store.ts`: Zustand `useLangStore` (lang, setLang, toggle, t) with localStorage persistence + `<html lang>` sync + `hydrateLang()` + `useT()` selector hook.
+   - `src/components/site/language-toggle.tsx`: compact ES/EN pill toggle with Languages icon, persists choice, updates `<html lang>`.
+   - All 13 site components refactored to consume `useT()` — navbar, hero, experience, menu, gallery, events, voices, private-events, location, newsletter, footer, cinematic-loader, floating-whatsapp.
+2. **Gallery category filter** — `GALLERY` data extended with `category` (room/craft/people/garnish) + `captionKey`; `GALLERY_CAPTIONS` dictionary (es/en). Gallery section rebuilt with 5 filter pills (All/The Room/The Craft/The Night/The Garnish) using `layoutId` shared-element animation, `AnimatePresence mode="popLayout"` for smooth enter/exit, and `motion.layout` on the grid. Captions translate with language.
+3. **Reservations availability calendar** (Prisma-backed):
+   - `prisma/schema.prisma`: added `ReservationDay` model (id, date @unique, status, seatsLeft, note, updatedAt). Pushed via `bun run db:push`.
+   - `src/app/api/availability/route.ts`: GET endpoint returning next 35 open nights (Thu/Fri/Sat only), auto-seeds missing days with deterministic pseudo-random availability (55% open / 30% limited / 15% full).
+   - `src/components/site/availability-modal.tsx`: month-grouped calendar grid with open/limited/full color coding, seat counts, legend, selectable tiles with animated check, selected-date panel showing status + seat count, "Reserve a Table" CTA that closes the calendar and opens the reservation modal. Fully translated.
+   - Navbar: added calendar icon button (desktop) + full-width calendar button (mobile drawer) to open the modal.
+4. **Ambient music player** (`ambient-player.tsx`) — stylized "Now Spinning / Sonando Ahora" card in the experience section below the pillars. Spinning vinyl disc (Framer Motion rotate loop) with gold center label, play/pause toggle that mounts a hidden Spotify embed iframe on play, footer link to Spotify. Bilingual copy.
+
+### Styling refinements
+- Navbar restructured: language toggle + calendar icon + VIP + Reserve on desktop; language toggle + hamburger on mobile; desktop nav links moved to `xl:flex` to accommodate the extra actions.
+- Newsletter button now shows "Suscrito/Subscribed" on done state (language-aware).
+- Gallery filter pills use active gold dot via `layoutId="gallery-filter-dot"`.
+
+### Supporting changes
+- `store.ts`: added `availability` to `ModalKind` + `openAvailability` action.
+- `constants.ts`: `GalleryImage` interface gained `category` + `captionKey`; added `GALLERY_CAPTIONS` + `GalleryCategory` type.
+- `page.tsx`: renders `AvailabilityModal` alongside the other 4 modals.
+
+## Verification Results
+- `bun run lint` → 0 errors, 0 warnings.
+- dev.log → compiles cleanly, GET / 200, GET /api/availability 200 with correct Prisma queries (SELECT + seed INSERT + COMMIT + re-SELECT), zero runtime errors.
+- agent-browser end-to-end: language toggle ES↔EN ✓, gallery filter 8→3 images ✓, availability calendar fetch+select+CTA ✓, ambient player play→Spotify iframe mounts ✓.
+- VLM audits: language toggle + gallery filters + calendar icon confirmed present in full-page; ambient player confirmed present in section close-up ("NOW SPINNING · Mezcal & Midnight" with vinyl + play button).
+
+## Unresolved Issues / Risks
+- None blocking. The ambient player's Spotify iframe only mounts after the first click (lazy) — this is intentional to avoid loading a third-party iframe on initial page load, but means the first play has a ~1s delay while Spotify loads.
+- The deterministic availability seeder is a placeholder; in production this would be fed by real reservation data. The seeder's pseudo-random distribution is stable per-date (same date → same availability) so it behaves consistently.
+- Gallery `AnimatePresence` with `popLayout` + `layout` can occasionally cause a brief reflow on rapid filter switching; acceptable for the cinematic feel.
+
+## Priority Recommendations for Next Phase
+1. **SEO blog teaser** — a 3-card "Diario" section linking to future long-form content (still the only unbuilt item from the original recommendation list).
+2. **Marquee polish** — tune testimonial marquee gap/width for a 10/10 spacing score (VLM noted 9/10).
+3. **Reservation modal ↔ calendar integration** — pre-fill the reservation modal's date field with the date selected in the availability calendar (currently the calendar just opens the modal).
+4. **Persist language in URL** — `/en` vs `/es` routes or `?lang=` query for SEO + shareable links (currently localStorage-only).
+5. **Real Spotify playlist** — replace the placeholder playlist ID with a curated La Negra brand playlist.
+6. **Newsletter API** — wire the newsletter form to a real `/api/newsletter` endpoint (Prisma `Subscriber` model) instead of the simulated success.
+7. **Accessibility pass** — audit all new interactive elements (filter pills, calendar tiles, player) for screen-reader labels and keyboard operability.

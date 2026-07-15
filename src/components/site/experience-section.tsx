@@ -4,6 +4,8 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Droplet, Wine, Utensils } from "lucide-react";
 import { fadeUp, staggerContainer, viewportOnce, EASE_CINEMA } from "@/lib/motion";
+import { useT } from "@/lib/lang-store";
+import { AmbientPlayer } from "@/components/site/ambient-player";
 
 const GALLERY = [
   {
@@ -30,6 +32,7 @@ const GALLERY = [
 ];
 
 export function ExperienceSection() {
+  const t = useT();
   const ref = useRef<HTMLElement>(null);
 
   return (
@@ -52,25 +55,22 @@ export function ExperienceSection() {
             variants={fadeUp}
             className="text-[11px] uppercase tracking-[0.45em] text-primary"
           >
-            Our Concept
+            {t.experience.eyebrow}
           </motion.span>
           <motion.h2
             id="experience-heading"
             variants={fadeUp}
             className="mt-5 font-serif-display text-[clamp(2rem,5.5vw,4rem)] font-medium leading-[1.05] text-foreground"
           >
-            A homage to darkness
+            {t.experience.h2Line1}
             <br />
-            and <span className="gold-gradient-text italic">fine drinking.</span>
+            <span className="gold-gradient-text italic">{t.experience.h2Line2}</span>
           </motion.h2>
           <motion.p
             variants={fadeUp}
             className="mx-auto mt-7 max-w-2xl text-pretty text-[15px] font-light leading-relaxed text-muted-foreground sm:text-base"
           >
-            At La Negra, we rescue the tradition of the Mexican cantina and
-            elevate it to its maximum expression. Single-village mezcal,
-            signature mixology, and a gastronomic curation that defies the
-            night.
+            {t.experience.body}
           </motion.p>
         </motion.div>
 
@@ -83,7 +83,7 @@ export function ExperienceSection() {
           transition={{ duration: 1.2, ease: EASE_CINEMA }}
         >
           <p className="font-display-quote text-[clamp(1.25rem,3vw,1.9rem)] font-light italic leading-snug text-foreground/85">
-            “La noche no se bebe. Se habita.”
+            “{t.experience.quote}”
           </p>
         </motion.blockquote>
 
@@ -102,11 +102,7 @@ export function ExperienceSection() {
           viewport={viewportOnce}
           variants={staggerContainer}
         >
-          {[
-            { k: "01", icon: "droplet", t: "Mezcal de Pueblo", d: "Espíritus trazables, destilados por maestros mezcaleros." },
-            { k: "02", icon: "wine", t: "Mixología de Autor", d: "Cócteles que reinterpretan la cantina mexicana." },
-            { k: "03", icon: "utensils", t: "Curaduría Gastronómica", d: "Alta cocina informal que acompaña la noche." },
-          ].map((p) => (
+          {t.experience.pillars.map((p, idx) => (
             <motion.div
               key={p.k}
               variants={fadeUp}
@@ -118,7 +114,7 @@ export function ExperienceSection() {
                 <span className="font-serif-display text-3xl text-primary/60 transition-colors group-hover:text-primary">
                   {p.k}
                 </span>
-                <PillarIcon name={p.icon} />
+                <PillarIcon name={idx === 0 ? "droplet" : idx === 1 ? "wine" : "utensils"} />
               </div>
               <h3 className="mt-3 font-serif-display text-xl text-foreground">
                 {p.t}
@@ -129,6 +125,11 @@ export function ExperienceSection() {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Ambient player */}
+        <div className="mt-16">
+          <AmbientPlayer />
+        </div>
       </div>
     </section>
   );

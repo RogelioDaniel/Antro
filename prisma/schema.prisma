@@ -30,3 +30,14 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+/// Per-night reservation availability for the La Negra calendar.
+/// `status`: "open" | "limited" | "full"
+model ReservationDay {
+  id        String   @id @default(cuid())
+  date      String   @unique // ISO yyyy-mm-dd
+  status    String   @default("open")
+  seatsLeft Int      @default(80)
+  note      String?
+  updatedAt DateTime @updatedAt
+}

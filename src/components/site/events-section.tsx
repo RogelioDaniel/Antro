@@ -5,9 +5,11 @@ import { motion } from "framer-motion";
 import { ArrowRight, Calendar } from "lucide-react";
 import { EVENTS } from "@/lib/constants";
 import { useUIStore } from "@/lib/store";
+import { useT } from "@/lib/lang-store";
 import { fadeUp, staggerFast, viewportOnce, EASE_CINEMA } from "@/lib/motion";
 
 export function EventsSection() {
+  const t = useT();
   const openReservation = useUIStore((s) => s.openReservation);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -32,14 +34,14 @@ export function EventsSection() {
             variants={staggerFast}
           >
             <motion.span variants={fadeUp} className="text-[11px] uppercase tracking-[0.45em] text-primary">
-              Próximamente
+              {t.events.eyebrow}
             </motion.span>
             <motion.h2
               id="events-heading"
               variants={fadeUp}
               className="mt-4 font-serif-display text-[clamp(2rem,5.5vw,4rem)] font-medium leading-[1.05] text-foreground"
             >
-              The Night&apos;s List.
+              {t.events.h2}
             </motion.h2>
           </motion.div>
 

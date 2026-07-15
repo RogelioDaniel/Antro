@@ -246,10 +246,14 @@ export const VIP_ARRIVAL_SLOTS = [
   "00:30",
 ] as const;
 
+export type GalleryCategory = "room" | "craft" | "people" | "garnish";
+
 export interface GalleryImage {
   src: string;
   alt: string;
-  caption: string;
+  /** key into galleryCaptions in i18n */
+  captionKey: string;
+  category: GalleryCategory;
   /** tailwind span classes for masonry feel */
   span: string;
 }
@@ -258,52 +262,71 @@ export const GALLERY: GalleryImage[] = [
   {
     src: "/images/gallery/g1.png",
     alt: "Mezcal copita being filled with amber liquid",
-    caption: "The Pour",
+    captionKey: "pour",
+    category: "craft",
     span: "sm:col-span-1 sm:row-span-2",
   },
   {
     src: "/images/gallery/g2.png",
     alt: "Dark luxury cantina bar counter at night",
-    caption: "The Room",
+    captionKey: "room",
+    category: "room",
     span: "sm:col-span-2",
   },
   {
     src: "/images/gallery/g3.png",
     alt: "Elegant woman holding a crystal cocktail glass",
-    caption: "The Night",
+    captionKey: "night",
+    category: "people",
     span: "sm:col-span-1 sm:row-span-2",
   },
   {
     src: "/images/gallery/g4.png",
     alt: "Dehydrated citrus wheels and marigold flowers",
-    caption: "The Garnish",
+    captionKey: "garnish",
+    category: "garnish",
     span: "sm:col-span-1",
   },
   {
     src: "/images/gallery/g5.png",
     alt: "Brass shaker and crystal glasses on dark bar",
-    caption: "The Craft",
+    captionKey: "craft",
+    category: "craft",
     span: "sm:col-span-1 sm:row-span-2",
   },
   {
     src: "/images/gallery/g6.png",
     alt: "Hands cutting fresh agave hearts on dark wood",
-    caption: "The Origin",
+    captionKey: "origin",
+    category: "craft",
     span: "sm:col-span-2",
   },
   {
     src: "/images/gallery/g7.png",
     alt: "Clay pot of mezcal with wooden spoon",
-    caption: "The Earth",
+    captionKey: "earth",
+    category: "garnish",
     span: "sm:col-span-1",
   },
   {
     src: "/images/gallery/g8.png",
     alt: "Bartender silhouette polishing a crystal glass",
-    caption: "The Keeper",
+    captionKey: "keeper",
+    category: "people",
     span: "sm:col-span-1 sm:row-span-2",
   },
 ];
+
+export const GALLERY_CAPTIONS: Record<string, { es: string; en: string }> = {
+  pour: { es: "El Vertido", en: "The Pour" },
+  room: { es: "El Lugar", en: "The Room" },
+  night: { es: "La Noche", en: "The Night" },
+  garnish: { es: "El Adorno", en: "The Garnish" },
+  craft: { es: "El Oficio", en: "The Craft" },
+  origin: { es: "El Origen", en: "The Origin" },
+  earth: { es: "La Tierra", en: "The Earth" },
+  keeper: { es: "El Guardián", en: "The Keeper" },
+};
 
 export interface Testimonial {
   quote: string;
