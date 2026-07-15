@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Clock } from "lucide-react";
 import { BLOG_POSTS } from "@/lib/constants";
 import { useT } from "@/lib/lang-store";
@@ -62,11 +63,12 @@ export function BlogSection() {
               <Link href={`/blog/${post.id}`} className="absolute inset-0 z-10" aria-label={t.blog.titles[post.titleKey]} />
               {/* Image */}
               <div className="relative aspect-[16/10] overflow-hidden">
-                <img
+                <Image
                   src={post.image}
                   alt={t.blog.titles[post.titleKey]}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/20 to-transparent" />
                 {/* date badge */}

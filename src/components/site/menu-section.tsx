@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { Download } from "lucide-react";
 import { MENU } from "@/lib/constants";
 import { useUIStore } from "@/lib/store";
@@ -85,12 +86,15 @@ export function MenuSection() {
             viewport={viewportOnce}
             transition={{ duration: 0.9, ease: EASE_CINEMA }}
           >
-            <img
-              src={section.image}
-              alt={section.label}
-              className="aspect-[4/5] w-full object-cover transition-transform duration-700 hover:scale-105 lg:aspect-[3/4]"
-              loading="lazy"
-            />
+            <div className="relative aspect-[4/5] w-full overflow-hidden lg:aspect-[3/4]">
+              <Image
+                src={section.image}
+                alt={section.label}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover transition-transform duration-700 hover:scale-105"
+              />
+            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-[#0a0a0a]/20 to-transparent" />
             {/* decorative corner ornament */}
             <div className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full border border-primary/40 bg-[#0a0a0a]/70 backdrop-blur">

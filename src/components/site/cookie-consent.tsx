@@ -83,6 +83,17 @@ export function CookieConsent() {
       }
     }
     setConsent(c);
+    // log server-side for LFPDPPP audit trail (fire-and-forget)
+    const action = c === "accepted" ? "accept_all" : "essential_only";
+    fetch("/api/consent?XTransformPort=3000", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action,
+        analytics: c === "accepted",
+        marketing: c === "accepted",
+      }),
+    }).catch(() => {});
   };
 
   const savePrefs = () => {
@@ -96,6 +107,16 @@ export function CookieConsent() {
     }
     setConsent(prefs.analytics || prefs.marketing ? "accepted" : "declined");
     setManageOpen(false);
+    // log server-side for LFPDPPP audit trail (fire-and-forget)
+    fetch("/api/consent?XTransformPort=3000", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "save_prefs",
+        analytics: prefs.analytics,
+        marketing: prefs.marketing,
+      }),
+    }).catch(() => {});
   };
 
   const show = mounted && consent === null;

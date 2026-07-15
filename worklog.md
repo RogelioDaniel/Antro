@@ -553,3 +553,58 @@ Task: Assess project status, QA via agent-browser, add cookie consent granularit
 5. **Server-side consent log** — record cookie consent (timestamp + prefs + IP) for LFPDPPP audit trail.
 6. **Performance audit** — Lighthouse pass; preload hero, verify CLS/LCP.
 7. **Menu section visual hierarchy** — VLM still flags menu as text-heavy; consider per-item thumbnail imagery or richer typographic contrast.
+
+---
+Task ID: cron-review-8 (webDevReview round 8)
+Agent: main (Z.ai Code) — cron-triggered
+Task: Assess project status, QA via agent-browser, convert remaining images to next/image, add server-side consent log.
+
+## Current Project Status (assessment)
+- Round 7 added cookie consent granularity, hero next/image, CSV export. Project stable, lint clean.
+- VLM audit identified: remaining images not optimized (menu/gallery/events/blog/experience/voices still `<img>`), menu text-heavy, no server-side consent log.
+- No bugs found; this round focused on next/image conversion across all sections + LFPDPPP consent logging.
+
+## QA Performed (agent-browser)
+- Home page: zero console errors / zero page errors. 30 images now served via next/image (`/_next/image?url=...`) with AVIF/WebP optimization. ✓
+- Consent log: cleared localStorage → banner reappeared → clicked "Accept All" → verified server-side ConsentLog entry created with `action:"accept_all", analytics:true, marketing:true, ip:"::1", userAgent:"Mozilla/5.0..."`. DB count went from 1 → 2. ✓
+- Consent API: tested via curl → POST returned `{ok:true, id, createdAt}`, GET returns logs. ✓
+- VLM audit: images now confirmed optimized, overall polish 8/10.
+
+## Completed Modifications
+### Performance improvements
+1. **next/image conversion across all sections** — converted `<img>` to `next/image` `<Image>` with proper `fill`/`sizes`/`priority`:
+   - `experience-section.tsx`: parallax cards — `motion.img` → `motion.div` wrapper (preserves parallax `y` transform) + inner `<Image fill>` with `sizes="(max-width: 768px) 100vw, 50vw"`.
+   - `gallery-section.tsx`: masonry grid tiles `<Image fill sizes="(max-width: 640px) 50vw, 25vw">` + lightbox `<Image width=1344 height=768 priority>`.
+   - `menu-section.tsx`: category visual panel — wrapped in relative aspect container + `<Image fill sizes="(max-width: 1024px) 100vw, 50vw">`.
+   - `events-section.tsx`: event card images `<Image fill sizes="(max-width: 640px) 78vw, 340px">`.
+   - `blog-section.tsx`: teaser card images `<Image fill sizes="(max-width: 768px) 100vw, 33vw">`.
+   - `blog-article.tsx`: hero image `<Image fill priority sizes="(max-width: 1024px) 100vw, 1024px">`.
+   - `blog-index-view.tsx`: featured + standard card images with responsive `sizes`.
+   - `voices-section.tsx`: testimonial avatars `<Image fill sizes="44px">`.
+   - Total: 30 images now optimized (AVIF/WebP auto-negotiation, responsive sizes, lazy loading where appropriate).
+
+### New features added
+2. **Server-side consent log** (LFPDPPP / GDPR audit trail):
+   - `prisma/schema.prisma`: added `ConsentLog` model (id, ip, userAgent, action, analytics, marketing, createdAt). Pushed via `db:push` + force-reloaded dev server.
+   - `src/app/api/consent/route.ts`: POST endpoint — accepts `{ action, analytics, marketing }`, validates action (accept_all/essential_only/save_prefs), extracts IP (x-forwarded-for → x-real-ip) + user-agent, persists to DB. GET returns recent 100 logs for audit.
+   - `cookie-consent.tsx`: `choose()` and `savePrefs()` now fire-and-forget POST to `/api/consent` with the action + preferences, creating a server-side audit record with timestamp + IP + user-agent for every consent decision.
+
+## Verification Results
+- `bun run lint` → 0 errors, 0 warnings.
+- dev.log → clean compiles, GET / 200, POST /api/consent 200, zero runtime errors.
+- agent-browser end-to-end: 30 optimized images ✓, consent log entry created on Accept All (verified in DB with action + prefs + IP + user-agent) ✓.
+- VLM audit: images confirmed optimized, overall polish 8/10.
+
+## Unresolved Issues / Risks
+- None blocking. The consent log records IP + user-agent which is itself personal data under LFPDPPP — production should add a retention policy + anonymization, and a privacy notice disclosing this logging.
+- The ConsentLog GET endpoint is not auth-protected (accessible via direct URL). Production would add admin auth.
+- All images are now next/image optimized; the only remaining raw `<img>` is in the PDF menu route (which is server-generated and doesn't need optimization).
+
+## Priority Recommendations for Next Phase
+1. **Real Spotify playlist** — replace the placeholder playlist ID with a curated La Negra brand playlist (long-standing item).
+2. **Real auth** — replace the admin PIN gate with NextAuth.js + protect consent/CSV endpoints.
+3. **Blog CMS** — move blog articles to a Prisma `Article` model.
+4. **Menu visual hierarchy** — VLM still flags menu as text-heavy; consider per-item thumbnail imagery or bolder typographic contrast.
+5. **Consent retention policy** — auto-anonymize IPs after 30 days + privacy notice disclosure.
+6. **Performance audit** — Lighthouse pass; verify CLS/LCP with the new next/image setup.
+7. **Admin consent dashboard** — view consent logs alongside reservations in the admin area.

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowLeft, Clock, Calendar, Share2, Check } from "lucide-react";
 import { BLOG_POSTS } from "@/lib/constants";
@@ -71,10 +72,13 @@ export function BlogArticle({ postId }: BlogArticleProps) {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, ease: EASE_CINEMA }}
       >
-        <img
+        <Image
           src={post.image}
           alt={title}
-          className="h-full w-full object-cover"
+          fill
+          priority
+          sizes="(max-width: 1024px) 100vw, 1024px"
+          className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
       </motion.div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowRight, Clock, ArrowLeft } from "lucide-react";
 import { BLOG_POSTS } from "@/lib/constants";
@@ -86,10 +87,12 @@ export function BlogIndexView() {
                     isFeatured ? "aspect-[21/9]" : "aspect-[16/10]"
                   }`}
                 >
-                  <img
+                  <Image
                     src={post.image}
                     alt={title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    fill
+                    sizes={isFeatured ? "(max-width: 768px) 100vw, 100vw" : "(max-width: 768px) 100vw, 50vw"}
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/20 to-transparent" />
                   {isFeatured && (

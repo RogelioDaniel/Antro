@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { Quote, Star } from "lucide-react";
 import { TESTIMONIALS } from "@/lib/constants";
 import { useT, useLangStore } from "@/lib/lang-store";
@@ -101,12 +102,13 @@ function TestimonialCard({
         </p>
 
         <div className="mt-6 flex items-center gap-3 border-t border-border/30 pt-5">
-          <div className="relative h-11 w-11 overflow-hidden rounded-full border border-primary/40">
-            <img
+          <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-primary/40">
+            <Image
               src={t.avatar}
               alt={t.name}
-              className="h-full w-full object-cover"
-              loading="lazy"
+              fill
+              sizes="44px"
+              className="object-cover"
             />
           </div>
           <div>

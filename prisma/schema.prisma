@@ -64,3 +64,15 @@ model Reservation {
   source    String   @default("website")
   createdAt DateTime @default(now())
 }
+
+/// Server-side cookie consent log for LFPDPPP / GDPR audit trail.
+/// Each row records a consent decision with timestamp + IP + preferences.
+model ConsentLog {
+  id        String   @id @default(cuid())
+  ip        String?
+  userAgent String?
+  action    String   // "accept_all" | "essential_only" | "save_prefs"
+  analytics Boolean  @default(false)
+  marketing Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

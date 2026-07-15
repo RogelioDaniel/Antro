@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, ZoomIn } from "lucide-react";
+import Image from "next/image";
 import { GALLERY, GALLERY_CAPTIONS, type GalleryCategory } from "@/lib/constants";
 import { useUIStore } from "@/lib/store";
 import { useT, useLangStore } from "@/lib/lang-store";
@@ -123,11 +124,12 @@ export function GallerySection() {
                 )}
                 aria-label={GALLERY_CAPTIONS[img.captionKey][lang]}
               >
-                <img
+                <Image
                   src={img.src}
                   alt={img.alt}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  loading="lazy"
+                  fill
+                  sizes="(max-width: 640px) 50vw, 25vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/90 via-transparent to-transparent opacity-80 transition-opacity group-hover:opacity-100" />
                 <span className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full border border-primary/40 bg-[#0a0a0a]/70 text-primary opacity-0 backdrop-blur transition-opacity duration-300 group-hover:opacity-100">
@@ -225,10 +227,13 @@ function Lightbox() {
             transition={{ duration: 0.4, ease: EASE_CINEMA }}
             onClick={(e) => e.stopPropagation()}
           >
-            <img
+            <Image
               src={current.src}
               alt={current.alt}
+              width={1344}
+              height={768}
               className="max-h-[78vh] w-auto rounded-sm border border-border/40 object-contain"
+              priority
             />
             <figcaption className="mt-4 flex items-center justify-center gap-3 text-center">
               <span className="font-serif-display text-lg text-foreground">

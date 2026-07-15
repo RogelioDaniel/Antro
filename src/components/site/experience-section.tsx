@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Droplet, Wine, Utensils } from "lucide-react";
 import { fadeUp, staggerContainer, viewportOnce, EASE_CINEMA } from "@/lib/motion";
@@ -175,13 +176,18 @@ function ParallaxCard({
       viewport={viewportOnce}
       transition={{ duration: 0.9, delay: index * 0.12, ease: EASE_CINEMA }}
     >
-      <motion.img
-        src={src}
-        alt={alt}
+      <motion.div
         style={{ y }}
-        className="absolute inset-0 h-[calc(100%+120px)] w-full -translate-y-[60px] object-cover transition-transform duration-700 group-hover:scale-105"
-        loading="lazy"
-      />
+        className="absolute inset-0 h-[calc(100%+120px)] -translate-y-[60px] transition-transform duration-700 group-hover:scale-105"
+      >
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover"
+        />
+      </motion.div>
       <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
       <div className="absolute bottom-0 left-0 flex w-full items-center justify-between p-5">
         <span className="text-[10px] uppercase tracking-[0.35em] text-foreground/90">
