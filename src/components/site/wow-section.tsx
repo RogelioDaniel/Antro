@@ -4,6 +4,18 @@ import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { useT } from "@/lib/lang-store";
 import { EASE_KINETIC, viewportOnce } from "@/lib/motion";
+import { ClubLights } from "@/components/site/club-lights";
+
+// Deterministic disco glints scattered around the rings.
+const SPARKLES = [
+  { left: "18%", top: "22%", dur: 3.2, delay: 0 },
+  { left: "76%", top: "18%", dur: 4.1, delay: 0.8 },
+  { left: "84%", top: "58%", dur: 3.6, delay: 1.6 },
+  { left: "12%", top: "64%", dur: 4.4, delay: 0.4 },
+  { left: "64%", top: "80%", dur: 3.8, delay: 2.1 },
+  { left: "30%", top: "12%", dur: 4.0, delay: 1.2 },
+  { left: "48%", top: "88%", dur: 3.4, delay: 2.6 },
+];
 
 /**
  * WOW section — the campaign centerpiece.
@@ -28,6 +40,23 @@ export function WowSection() {
       aria-label={t.kinetic.wow.caption}
     >
       <div className="cinematic-grain absolute inset-0 opacity-50" />
+      <ClubLights variant="wow" />
+
+      {/* Disco glints */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        {SPARKLES.map((s, i) => (
+          <span
+            key={i}
+            className="sparkle"
+            style={{
+              left: s.left,
+              top: s.top,
+              ["--tw-dur" as string]: `${s.dur}s`,
+              ["--tw-delay" as string]: `${s.delay}s`,
+            }}
+          />
+        ))}
+      </div>
 
       {/* Concentric target circles + rotating ring text */}
       <div
@@ -78,7 +107,7 @@ export function WowSection() {
 
       {/* Giant word across the scene */}
       <motion.h2
-        className="font-kinetic pointer-events-none absolute z-10 w-full text-center text-foreground"
+        className="font-kinetic uv-glow pointer-events-none absolute z-10 w-full text-center text-foreground"
         style={{ fontSize: "clamp(4rem, 17vw, 15rem)", textShadow: "0 20px 80px rgba(0,0,0,0.6)" }}
         initial={{ opacity: 0, scale: 0.86 }}
         whileInView={{ opacity: 1, scale: 1 }}
@@ -90,7 +119,7 @@ export function WowSection() {
 
       {/* Circular photo punched through the word */}
       <motion.div
-        className="relative z-20 h-[min(58vw,340px)] w-[min(58vw,340px)] overflow-hidden rounded-full border-[6px] border-foreground shadow-[0_30px_90px_rgba(0,0,0,0.65)]"
+        className="relative z-20 h-[min(58vw,340px)] w-[min(58vw,340px)] overflow-hidden rounded-full border-[5px] border-primary shadow-[0_30px_90px_rgba(0,0,0,0.65),0_0_60px_rgba(197,160,89,0.35),0_0_120px_rgba(139,92,246,0.18)]"
         initial={{ scale: 0, rotate: -8 }}
         whileInView={{ scale: 1, rotate: 0 }}
         viewport={viewportOnce}

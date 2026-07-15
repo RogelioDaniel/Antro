@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useUIStore } from "@/lib/store";
 import { useT } from "@/lib/lang-store";
 import { EASE_KINETIC, viewportOnce } from "@/lib/motion";
+import { ClubLights } from "@/components/site/club-lights";
 
 /**
  * Pattern CTA — full-bleed wine wall tiled with drifting agave glyphs
@@ -35,6 +36,7 @@ export function PatternCtaSection() {
         aria-hidden="true"
       />
       <div className="cinematic-grain absolute inset-0 opacity-40" />
+      <ClubLights variant="cta" />
 
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 text-center">
         <motion.h2
@@ -52,7 +54,7 @@ export function PatternCtaSection() {
 
         <motion.button
           onClick={openReservation}
-          className="mt-12 rounded-full bg-[#0a0a0a] px-12 py-5 text-[13px] uppercase tracking-[0.3em] text-foreground shadow-[0_18px_60px_rgba(0,0,0,0.5)] transition-transform hover:scale-105 hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+          className="btn-shine mt-12 rounded-full border border-primary/50 bg-[#0a0a0a] px-12 py-5 text-[13px] uppercase tracking-[0.3em] text-foreground shadow-[0_18px_60px_rgba(0,0,0,0.5),0_0_40px_rgba(197,160,89,0.15)] transition-all hover:scale-105 hover:border-primary hover:text-primary hover:shadow-[0_18px_60px_rgba(0,0,0,0.5),0_0_70px_rgba(197,160,89,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={viewportOnce}

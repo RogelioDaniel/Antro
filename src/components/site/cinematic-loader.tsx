@@ -73,6 +73,8 @@ export function CinematicLoader() {
                       ? undefined
                       : `bar-pulse 0.55s ease-in-out ${i * 0.14}s infinite`,
                     transformOrigin: "center",
+                    boxShadow:
+                      "0 0 34px rgba(197,160,89,0.55), 0 0 90px rgba(139,92,246,0.2)",
                   }}
                 />
               ))}
@@ -82,7 +84,7 @@ export function CinematicLoader() {
           {/* Phase 2 — giant phrase slams across the screen */}
           {phase === "phrase" && (
             <motion.div
-              className="font-kinetic whitespace-nowrap text-foreground"
+              className="font-kinetic chrome-gold gold-halo whitespace-nowrap"
               style={{ fontSize: "clamp(6rem, 26vw, 22rem)" }}
               initial={
                 prefersReduced

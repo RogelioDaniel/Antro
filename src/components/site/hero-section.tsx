@@ -7,6 +7,8 @@ import { useUIStore } from "@/lib/store";
 import { useT } from "@/lib/lang-store";
 import { EASE_CINEMA, letterDrop, letterStagger } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
+import { ClubLights } from "@/components/site/club-lights";
+import { Equalizer } from "@/components/site/equalizer";
 
 // Deterministic ember positions for cinematic ambience (avoids re-randomizing on re-render)
 const EMBER_CONFIG = [
@@ -71,6 +73,9 @@ export function HeroSection() {
         </div>
       </motion.div>
 
+      {/* The lighting rig — beams + haze over the type wall */}
+      <ClubLights variant="hero" />
+
       {/* Vignette + grain to keep the premium darkness */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(10,10,10,0.55)_90%)]" />
       <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
@@ -120,7 +125,7 @@ export function HeroSection() {
             {t.kinetic.heroPre}
           </motion.span>
           <motion.span
-            className="font-kinetic mt-1 flex text-foreground"
+            className="font-kinetic gold-halo mt-1 flex"
             style={{ fontSize: "clamp(5rem, 21vw, 19rem)" }}
             variants={prefersReduced ? undefined : letterStagger}
             initial={prefersReduced ? { opacity: 0 } : "hidden"}
@@ -135,10 +140,7 @@ export function HeroSection() {
                 key={`${ch}-${i}`}
                 custom={i}
                 variants={prefersReduced ? undefined : letterDrop}
-                className="inline-block"
-                style={{
-                  textShadow: "0 18px 60px rgba(0,0,0,0.55)",
-                }}
+                className="chrome-gold inline-block"
               >
                 {ch}
               </motion.span>
@@ -164,7 +166,7 @@ export function HeroSection() {
           <Button
             onClick={openReservation}
             size="lg"
-            className="group h-13 rounded-full bg-primary px-10 py-6 text-[12px] uppercase tracking-[0.25em] text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_50px_rgba(197,160,89,0.45)]"
+            className="btn-shine group h-13 rounded-full bg-primary px-10 py-6 text-[12px] uppercase tracking-[0.25em] text-primary-foreground transition-all hover:bg-primary/90 hover:shadow-[0_0_50px_rgba(197,160,89,0.45)]"
           >
             {t.hero.ctaReserve}
           </Button>
@@ -200,6 +202,19 @@ export function HeroSection() {
           <ArrowDown className="size-4" />
         </motion.span>
       </motion.button>
+
+      {/* Side ornament — the house's pulse */}
+      <motion.div
+        className="absolute bottom-8 left-6 z-10 hidden items-end gap-3 lg:flex"
+        initial={{ opacity: 0 }}
+        animate={loaderDone ? { opacity: 1 } : {}}
+        transition={{ duration: 1, delay: 1.6 }}
+      >
+        <Equalizer />
+        <span className="pb-0.5 text-[9px] uppercase tracking-[0.35em] text-foreground/60">
+          Live
+        </span>
+      </motion.div>
 
       {/* Side ornament — hours */}
       <motion.div

@@ -24,6 +24,7 @@ import { SectionDivider } from "@/components/site/section-divider";
 import { KineticMarquee } from "@/components/site/kinetic-marquee";
 import { WowSection } from "@/components/site/wow-section";
 import { PatternCtaSection } from "@/components/site/pattern-cta-section";
+import { ScrollProgress } from "@/components/site/scroll-progress";
 import { useT } from "@/lib/lang-store";
 
 export default function Home() {
@@ -32,6 +33,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <CinematicLoader />
+      <ScrollProgress />
       <Navbar />
       <main className="flex-1">
         <HeroSection />

@@ -22,7 +22,7 @@ export function KineticMarquee({
         <span key={i} className="flex items-center">
           <span
             className={`font-kinetic px-6 text-[clamp(2.6rem,7vw,6rem)] leading-none ${
-              i % 2 === 0 ? "text-primary" : "text-hollow"
+              i % 2 === 0 ? "chrome-gold [animation:none]" : "text-hollow"
             }`}
           >
             {phrase}
