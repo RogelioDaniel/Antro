@@ -19,6 +19,7 @@ import { VipListModal } from "@/components/site/vip-list-modal";
 import { DressCodeModal } from "@/components/site/dress-code-modal";
 import { PrivateEventsModal } from "@/components/site/private-events-modal";
 import { AvailabilityModal } from "@/components/site/availability-modal";
+import { CookieConsent } from "@/components/site/cookie-consent";
 import { SectionDivider } from "@/components/site/section-divider";
 
 export default function Home() {
@@ -52,6 +53,7 @@ export default function Home() {
       <DressCodeModal />
       <PrivateEventsModal />
       <AvailabilityModal />
+      <CookieConsent />
     </div>
   );
 }

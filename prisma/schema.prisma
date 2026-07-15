@@ -49,3 +49,18 @@ model Subscriber {
   lang      String   @default("es")
   createdAt DateTime @default(now())
 }
+
+/// Reservation requests submitted via the reservation modal.
+/// status: "pending" (awaiting WhatsApp confirmation) | "confirmed" | "cancelled"
+model Reservation {
+  id        String   @id @default(cuid())
+  name      String
+  phone     String
+  date      String
+  time      String
+  guests    Int
+  notes     String?
+  status    String   @default("pending")
+  source    String   @default("website")
+  createdAt DateTime @default(now())
+}

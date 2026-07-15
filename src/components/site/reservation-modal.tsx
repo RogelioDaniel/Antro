@@ -91,24 +91,57 @@ export function ReservationModal() {
   const set = (k: keyof ReservationData, v: string) =>
     setForm((f) => ({ ...f, [k]: v }));
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setTouched({ date: true, time: true, guests: true, name: true, phone: true });
     if (!isValid || !form.date || !form.time || !form.guests || !form.name || !form.phone)
       return;
     setSubmitting(true);
-    const message = buildReservationMessage({
-      date: form.date,
-      time: form.time,
-      guests: form.guests,
-      name: form.name,
-      phone: form.phone,
-    });
-    setTimeout(() => {
+    try {
+      // Persist the reservation to the database
+      const res = await fetch("/api/reservations?XTransformPort=3000", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          date: form.date,
+          time: form.time,
+          guests: form.guests,
+          notes: form.notes ?? "",
+        }),
+      });
+      const data = await res.json();
+      const reservationId = data?.reservation?.id
+        ? data.reservation.id.slice(-8).toUpperCase()
+        : undefined;
+      const message = buildReservationMessage(
+        {
+          date: form.date,
+          time: form.time,
+          guests: form.guests,
+          name: form.name,
+          phone: form.phone,
+          notes: form.notes,
+        },
+        reservationId
+      );
       openWhatsApp(message);
+    } catch {
+      // Fallback: open WhatsApp without persistence
+      const message = buildReservationMessage({
+        date: form.date,
+        time: form.time,
+        guests: form.guests,
+        name: form.name,
+        phone: form.phone,
+        notes: form.notes,
+      });
+      openWhatsApp(message);
+    } finally {
       setSubmitting(false);
       close();
-    }, 600);
+    }
   };
 
   return (

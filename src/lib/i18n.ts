@@ -100,7 +100,11 @@ export interface Dict {
     minRead: string;
     titles: Record<string, string>;
     excerpts: Record<string, string>;
+    bodies: Record<string, string[]>;
     viewAll: string;
+    back: string;
+    share: string;
+    publishedOn: string;
   };
   footer: {
     tagline: string;
@@ -191,6 +195,13 @@ export interface Dict {
     tooltipTitle: string;
     tooltipBody: string;
     defaultMsg: string;
+  };
+  cookie: {
+    title: string;
+    body: string;
+    accept: string;
+    decline: string;
+    link: string;
   };
 }
 
@@ -283,6 +294,9 @@ const es: Dict = {
     readMore: "Leer",
     minRead: "min",
     viewAll: "Ver todo el diario",
+    back: "Volver al diario",
+    share: "Compartir",
+    publishedOn: "Publicado el",
     titles: {
       mezcalOrigin: "El origen del mezcal de pueblo",
       romaNight: "Una noche en la Roma-Condesa",
@@ -292,6 +306,29 @@ const es: Dict = {
       mezcalOrigin: "Del corazón de agave a la copa. Un viaje a la sierra de Oaxaca con el maestro mezcalero que destila nuestro espíritu de pueblo.",
       romaNight: "Por qué la Roma-Condesa es el corazón nocturno de la CDMX, y cómo La Negra se convirtió en su cantina de autor.",
       mixology: "Detrás de cada cóctel hay una historia. Te contamos cómo nació La Negra Tónica y por qué el humo lo cambia todo.",
+    },
+    bodies: {
+      mezcalOrigin: [
+        "Hay un momento, en la sierra de Oaxaca, en que el silencio se rompe por el golpe rítmico de la tahona. Es el sonido del agave espadín siendo molido por una piedra de caballo girada por un animal paciente. Ese sonido es el primer paso de un viaje que termina en una copa de bar, frente a ti, en La Negra.",
+        "Nuestro maestro mezcalero, don Atilano, lleva cuarenta años destilando en olla de cobre. No usa termómetros. Sabe, dice, por el olor del vapor y el color del destilado cuando el mezcal está listo. Es una sabiduría que no se enseña en escuelas; se hereda, de padre a hijo, de noche a noche, junto al horno de tierra.",
+        "El mezcal de pueblo no es una categoría comercial. Es una declaración: cada botella viene de un solo pueblo, de un solo palenque, de manos específicas. Cuando vertimos un Tobalá Silvestre en La Negra, sabemos qué cerro lo vio crecer, qué lluvia lo maduró, qué manos lo cortaron después de siete años de sol.",
+        "Por eso servimos en copita de bar, no de vidrio. El bar respira, y el mezcal se abre. Por eso no hacemos shots. El mezcal de pueblo se habita, se contempla, se acompaña de unas gotas de sal de gusano y un trozo de naranja. Es un ritual, no un trago.",
+        "La próxima vez que vengas a La Negra, pide un Tobalá. Pregúntanos de dónde viene. Te contaremos la historia del cerro, del maestro, del silencio. Esa es la diferencia entre beber y comprender.",
+      ],
+      romaNight: [
+        "La Roma-Condesa no duerme; cambia de manos. Al caer la tarde, los cafés ceden el paso a las cantinas, los paseadores a los noctámbulos, la luz dorada a la oscuridad intencional. Es en ese tránsito donde La Negra encuentra su lugar.",
+        "Cuando diseñamos La Negra, no queríamos ser otro bar. Queríamos ser una cantina de autor: un lugar que respetara la tradición del mezcal pero que la elevara, que entendiera que la noche de la Roma es tan cinematográfica como cualquier ciudad europea, y que merecía un escenario a su altura.",
+        "Por eso la oscuridad. Por qué el oro. Por qué el humo. Cada elemento está pensado para que, cuando entres, dejes la calle atrás y entres en otro tiempo. Una cantina mexicana del siglo XXI, pero con el alma de las de antes.",
+        "La Roma-Condesa es el corazón nocturno de la CDMX porque mezcla todo: lo histórico y lo nuevo, lo extranjero y lo local, lo alto y lo bajo. La Negra se sentó en esa frontera y decidió ser autora: curar el mezcal, firmar los cócteles, contar la noche como una historia.",
+        "Ven un jueves. Siéntate en la barra. Pide un La Negra Tónica y observa cómo la sala se llena. Esa es la Roma que queríamos contar.",
+      ],
+      mixology: [
+        "Todo cóctel de autor comienza con una pregunta. La Negra Tónica nació de una: ¿qué pasa si mezclamos el carácter ahumado del mezcal espadín con la limpieza de una tónica artesanal y la acidez de cítricos deshidratados?",
+        "La respuesta tardó seis meses. Probamos tónicas de todo el mundo hasta encontrar una pequeña producción belga que respeta al mezcal sin taparlo. Deshidratamos naranja, toronja y limón en horno bajo durante doce horas, hasta que el azúcar se concentra y la cascara se vuelve cristalina.",
+        "El humo no es decoración. Cuando pasamos la copa por humo de madera de manzano, estamos haciendo algo preciso: el humo encapsula los aromas del mezcal y los libera lentamente conforme bebes. No es un truco; es arquitectura.",
+        "Detrás de cada cóctel de nuestra carta hay una historia similar. El Rojo Brujo nació de un sueño con hibisco; el Humo Old Fashioned, de una obsesión con el panela; el Cempasúchil Spritz, de la flor de muertos.",
+        "La mixología de autor no es arrogancia. Es respeto: por el ingrediente, por el oficio, por quien bebe. Cuando pides un cóctel en La Negra, no estás pidiendo un trago. Estás pidiendo el resultado de meses de trabajo, de errores, de noches. Por eso cuesta lo que cuesta. Por eso vale lo que vale.",
+      ],
     },
   },
   footer: {
@@ -407,6 +444,13 @@ const es: Dict = {
     tooltipBody: "Escríbenos, respondemos rápido.",
     defaultMsg: "Hola La Negra, me gustaría información sobre reservaciones y la lista VIP.",
   },
+  cookie: {
+    title: "Privacidad de La Negra",
+    body: "Usamos cookies esenciales para el funcionamiento del sitio y de analítica anónima para mejorar tu experiencia. Puedes aceptar o rechazar la analítica.",
+    accept: "Aceptar todo",
+    decline: "Solo esenciales",
+    link: "Política de privacidad",
+  },
 };
 
 const en: Dict = {
@@ -498,6 +542,9 @@ const en: Dict = {
     readMore: "Read",
     minRead: "min",
     viewAll: "View the full journal",
+    back: "Back to the journal",
+    share: "Share",
+    publishedOn: "Published on",
     titles: {
       mezcalOrigin: "The origin of single-village mezcal",
       romaNight: "A night in Roma-Condesa",
@@ -507,6 +554,29 @@ const en: Dict = {
       mezcalOrigin: "From the heart of agave to the glass. A journey to the Oaxaca mountains with the master mezcalero who distills our village spirit.",
       romaNight: "Why Roma-Condesa is the nocturnal heart of CDMX, and how La Negra became its author cantina.",
       mixology: "Behind every cocktail is a story. We tell you how La Negra Tónica was born and why smoke changes everything.",
+    },
+    bodies: {
+      mezcalOrigin: [
+        "There is a moment, in the Oaxaca mountains, when the silence is broken by the rhythmic strike of the tahona. It is the sound of espadín agave being ground by a horse stone turned by a patient animal. That sound is the first step of a journey that ends in a clay cup, before you, at La Negra.",
+        "Our master mezcalero, don Atilano, has been distilling in copper stills for forty years. He uses no thermometers. He knows, he says, by the smell of the vapor and the color of the distillate when the mezcal is ready. It is a wisdom not taught in schools; it is inherited, from father to son, from night to night, beside the earthen oven.",
+        "Single-village mezcal is not a commercial category. It is a declaration: every bottle comes from a single village, a single palenque, specific hands. When we pour a wild Tobalá at La Negra, we know which hill saw it grow, which rain ripened it, which hands cut it after seven years of sun.",
+        "That is why we serve in a clay copita, not glass. The clay breathes, and the mezcal opens. That is why we do not do shots. Single-village mezcal is inhabited, contemplated, accompanied by a few drops of agave worm salt and a slice of orange. It is a ritual, not a drink.",
+        "Next time you come to La Negra, order a Tobalá. Ask us where it comes from. We will tell you the story of the hill, the master, the silence. That is the difference between drinking and understanding.",
+      ],
+      romaNight: [
+        "Roma-Condesa does not sleep; it changes hands. As evening falls, cafés yield to cantinas, strollers to night owls, golden light to intentional darkness. It is in that transition that La Negra finds its place.",
+        "When we designed La Negra, we did not want to be another bar. We wanted to be an author cantina: a place that respected the tradition of mezcal but elevated it, that understood the night of Roma is as cinematic as any European city, and that it deserved a stage to match.",
+        "That is why the darkness. That is why the gold. That is why the smoke. Every element is designed so that, when you enter, you leave the street behind and step into another time. A 21st-century Mexican cantina, but with the soul of the old ones.",
+        "Roma-Condesa is the nocturnal heart of CDMX because it mixes everything: the historic and the new, the foreign and the local, the high and the low. La Negra sat at that frontier and decided to be an author: to curate the mezcal, to sign the cocktails, to tell the night as a story.",
+        "Come on a Thursday. Sit at the bar. Order a La Negra Tónica and watch the room fill. That is the Roma we wanted to tell.",
+      ],
+      mixology: [
+        "Every signature cocktail begins with a question. La Negra Tónica was born of one: what happens if we mix the smoky character of espadín mezcal with the cleanness of an artisanal tonic and the acidity of dehydrated citrus?",
+        "The answer took six months. We tried tonics from all over the world until we found a small Belgian production that respected the mezcal without covering it. We dehydrated orange, grapefruit and lemon in a low oven for twelve hours, until the sugar concentrated and the peel turned crystalline.",
+        "The smoke is not decoration. When we pass the glass through applewood smoke, we are doing something precise: the smoke encapsulates the aromas of the mezcal and releases them slowly as you drink. It is not a trick; it is architecture.",
+        "Behind every cocktail on our menu there is a similar story. Rojo Brujo was born from a dream with hibiscus; Humo Old Fashioned, from an obsession with panela; Cempasúchil Spritz, from the flower of the dead.",
+        "Signature mixology is not arrogance. It is respect: for the ingredient, for the craft, for the drinker. When you order a cocktail at La Negra, you are not ordering a drink. You are ordering the result of months of work, of mistakes, of nights. That is why it costs what it costs. That is why it is worth what it is worth.",
+      ],
     },
   },
   footer: {
@@ -621,6 +691,13 @@ const en: Dict = {
     tooltipTitle: "Reservations or VIP list?",
     tooltipBody: "Message us, we reply fast.",
     defaultMsg: "Hi La Negra, I'd like info about reservations and the VIP list.",
+  },
+  cookie: {
+    title: "La Negra Privacy",
+    body: "We use essential cookies for the site to function and anonymous analytics to improve your experience. You may accept or decline analytics.",
+    accept: "Accept all",
+    decline: "Essential only",
+    link: "Privacy policy",
   },
 };
 

@@ -44,10 +44,11 @@ export function generateWhatsAppLink(message: string): string {
   return `https://wa.me/${SITE.phone}?text=${encodeURIComponent(message)}`;
 }
 
-export function buildReservationMessage(d: ReservationData): string {
+export function buildReservationMessage(d: ReservationData, reservationId?: string): string {
   return [
     "*LA NEGRA — Reservación de Mesa*",
     "",
+    reservationId ? `Folio: ${reservationId}` : "",
     `Nombre: ${d.name}`,
     `Fecha: ${d.date}`,
     `Hora: ${d.time}`,

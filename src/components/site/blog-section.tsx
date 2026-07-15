@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { ArrowRight, Clock } from "lucide-react";
 import { BLOG_POSTS } from "@/lib/constants";
 import { useT } from "@/lib/lang-store";
@@ -58,6 +59,7 @@ export function BlogSection() {
               variants={fadeUp}
               className="group relative flex flex-col overflow-hidden rounded-sm border border-border/30 bg-[#0d0d0d] transition-colors hover:border-primary/50"
             >
+              <Link href={`/blog/${post.id}`} className="absolute inset-0 z-10" aria-label={t.blog.titles[post.titleKey]} />
               {/* Image */}
               <div className="relative aspect-[16/10] overflow-hidden">
                 <img
@@ -94,12 +96,13 @@ export function BlogSection() {
                 <p className="mt-3 flex-1 text-[13px] leading-relaxed text-muted-foreground">
                   {t.blog.excerpts[post.excerptKey]}
                 </p>
-                <button
-                  className="group/btn mt-5 inline-flex items-center gap-1.5 self-start border-b border-primary/40 pb-1 text-[10px] uppercase tracking-[0.25em] text-primary transition-all hover:gap-3"
+                <Link
+                  href={`/blog/${post.id}`}
+                  className="group/btn relative z-20 mt-5 inline-flex items-center gap-1.5 self-start border-b border-primary/40 pb-1 text-[10px] uppercase tracking-[0.25em] text-primary transition-all hover:gap-3"
                 >
                   {t.blog.readMore}
                   <ArrowRight className="size-3.5 transition-transform group-hover/btn:translate-x-0.5" />
-                </button>
+                </Link>
               </div>
 
               {/* hover gold top accent */}
