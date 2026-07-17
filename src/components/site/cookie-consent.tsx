@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Cookie, X, Check, ShieldCheck, Settings, Lock } from "lucide-react";
 import {
   Dialog,
@@ -51,6 +51,7 @@ function readPrefs(): Preferences {
  */
 export function CookieConsent() {
   const t = useT();
+  const prefersReducedMotion = useReducedMotion();
   const [consent, setConsent] = useState<Consent>(null);
   const [mounted, setMounted] = useState(false);
   const [manageOpen, setManageOpen] = useState(false);
@@ -126,18 +127,23 @@ export function CookieConsent() {
       <AnimatePresence>
         {show && (
           <motion.div
+            data-cookie-consent="open"
             className="fixed inset-x-0 bottom-0 z-[95] px-4 pb-4 sm:px-6 sm:pb-6"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 40 }}
-            transition={{ duration: 0.5, ease: EASE_CINEMA }}
+            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 40 }}
+            animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+            exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 40 }}
+            transition={
+              prefersReducedMotion
+                ? { duration: 0.15 }
+                : { duration: 0.5, ease: EASE_CINEMA }
+            }
             role="dialog"
             aria-live="polite"
             aria-label={t.cookie.title}
           >
             <div className="glass-panel mx-auto max-w-3xl overflow-hidden rounded-sm border-primary/30 shadow-2xl">
               <div className="h-px w-full bg-gradient-to-r from-transparent via-primary to-transparent" />
-              <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:gap-5 sm:p-6">
+              <div className="grid gap-4 p-5 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-center sm:gap-x-5 sm:p-6">
                 {/* icon */}
                 <div className="flex shrink-0 items-center gap-3 sm:flex-col sm:items-center">
                   <span className="flex h-11 w-11 items-center justify-center rounded-full border border-primary/40 bg-primary/10">
@@ -162,24 +168,24 @@ export function CookieConsent() {
                 </div>
 
                 {/* actions */}
-                <div className="flex shrink-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
+                <div className="flex flex-col gap-2 sm:col-span-2 sm:grid sm:grid-cols-2 md:grid-cols-3">
                   <button
                     onClick={() => setManageOpen(true)}
-                    className="inline-flex h-10 items-center justify-center gap-1.5 rounded-none border border-border/50 px-4 text-[10px] uppercase tracking-[0.2em] text-foreground/80 transition-colors hover:border-primary/50 hover:text-primary sm:order-first sm:w-full"
+                    className="inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-none border border-border/50 px-4 text-[10px] uppercase tracking-[0.2em] text-foreground/80 transition-colors hover:border-primary/50 hover:text-primary sm:col-span-2 md:col-span-1"
                   >
                     <Settings className="size-3.5" />
                     {t.cookie.manage}
                   </button>
                   <button
                     onClick={() => choose("declined")}
-                    className="inline-flex h-10 items-center justify-center gap-1.5 rounded-none border border-border/50 px-4 text-[10px] uppercase tracking-[0.2em] text-foreground/80 transition-colors hover:border-primary/50 hover:text-foreground"
+                    className="inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-none border border-border/50 px-4 text-[10px] uppercase tracking-[0.2em] text-foreground/80 transition-colors hover:border-primary/50 hover:text-foreground"
                   >
                     <X className="size-3.5" />
                     {t.cookie.decline}
                   </button>
                   <button
                     onClick={() => choose("accepted")}
-                    className="inline-flex h-10 items-center justify-center gap-1.5 rounded-none bg-primary px-5 text-[10px] uppercase tracking-[0.2em] text-primary-foreground transition-all hover:bg-primary-dark hover:shadow-[0_0_24px_rgba(197,160,89,0.35)]"
+                    className="inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-none bg-primary px-5 text-[10px] uppercase tracking-[0.2em] text-primary-foreground transition-all hover:bg-primary-dark hover:shadow-[0_0_24px_rgba(197,160,89,0.35)]"
                   >
                     <Check className="size-3.5" />
                     {t.cookie.accept}

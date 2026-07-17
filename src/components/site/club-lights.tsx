@@ -1,5 +1,15 @@
 "use client";
 
+import dynamic from "next/dynamic";
+
+const ClubLightsWebGL = dynamic(
+  () =>
+    import("@/components/site/club-lights-webgl").then(
+      (module) => module.ClubLightsWebGL,
+    ),
+  { ssr: false },
+);
+
 /**
  * ClubLights — the venue's lighting rig, as a decorative overlay.
  * Sweeping beams (warm gold spotlight + ultraviolet wash) over drifting
@@ -84,6 +94,7 @@ export function ClubLights({ variant = "hero" }: { variant?: Variant }) {
           }}
         />
       ))}
+      {variant === "hero" ? <ClubLightsWebGL /> : null}
     </div>
   );
 }

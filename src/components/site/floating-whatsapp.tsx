@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { MessageCircle, X } from "lucide-react";
 import { generateWhatsAppLink } from "@/lib/whatsapp";
 import { SITE } from "@/lib/constants";
@@ -9,6 +9,7 @@ import { useT } from "@/lib/lang-store";
 
 export function FloatingWhatsApp() {
   const t = useT();
+  const prefersReducedMotion = useReducedMotion();
   const [show, setShow] = useState(false);
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
@@ -27,11 +28,16 @@ export function FloatingWhatsApp() {
     <AnimatePresence>
       {show && (
         <motion.div
-          className="fixed bottom-5 right-5 z-[90] flex items-end gap-3 sm:bottom-7 sm:right-7"
-          initial={{ opacity: 0, y: 30, scale: 0.8 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 30, scale: 0.8 }}
-          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          data-floating-whatsapp
+          className="fixed bottom-[calc(1.25rem+env(safe-area-inset-bottom))] right-[calc(1.25rem+env(safe-area-inset-right))] z-[90] flex items-end gap-3 sm:bottom-[calc(1.75rem+env(safe-area-inset-bottom))] sm:right-[calc(1.75rem+env(safe-area-inset-right))]"
+          initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 30, scale: 0.8 }}
+          animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+          exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 30, scale: 0.8 }}
+          transition={
+            prefersReducedMotion
+              ? { duration: 0.15 }
+              : { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+          }
         >
           {/* Tooltip bubble */}
           <AnimatePresence>
@@ -71,7 +77,7 @@ export function FloatingWhatsApp() {
             <MessageCircle className="size-7 text-white" fill="currentColor" />
             {/* online dot */}
             <span className="absolute right-0 top-0 flex h-3.5 w-3.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60 motion-reduce:animate-none" />
               <span className="relative inline-flex h-3.5 w-3.5 rounded-full border-2 border-[#25D366] bg-primary" />
             </span>
           </a>

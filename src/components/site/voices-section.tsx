@@ -1,14 +1,15 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { Quote, Star } from "lucide-react";
 import { TESTIMONIALS } from "@/lib/constants";
-import { useT, useLangStore } from "@/lib/lang-store";
+import { useT } from "@/lib/lang-store";
 import { fadeUp, staggerFast, viewportOnce } from "@/lib/motion";
 
 export function VoicesSection() {
   const t = useT();
+  const prefersReducedMotion = useReducedMotion();
   // duplicate for a seamless marquee loop
   const marquee = [...TESTIMONIALS, ...TESTIMONIALS];
 
@@ -59,12 +60,16 @@ export function VoicesSection() {
 
         <motion.div
           className="flex w-max gap-8 pr-8"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{
-            duration: 48,
-            ease: "linear",
-            repeat: Infinity,
-          }}
+          animate={prefersReducedMotion ? undefined : { x: ["0%", "-50%"] }}
+          transition={
+            prefersReducedMotion
+              ? undefined
+              : {
+                  duration: 48,
+                  ease: "linear",
+                  repeat: Infinity,
+                }
+          }
           // pause on hover for readability
           whileHover="paused"
         >

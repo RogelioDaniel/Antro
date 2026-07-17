@@ -196,8 +196,12 @@ export function HeroSection() {
       >
         <span className="text-[9px] uppercase tracking-[0.4em]">{t.hero.scroll}</span>
         <motion.span
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          animate={prefersReduced ? undefined : { y: [0, 6, 0] }}
+          transition={
+            prefersReduced
+              ? undefined
+              : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }
+          }
         >
           <ArrowDown className="size-4" />
         </motion.span>

@@ -6,39 +6,76 @@ import { useUIStore } from "@/lib/store";
 import { useT } from "@/lib/lang-store";
 import { EASE_KINETIC } from "@/lib/motion";
 
+const INTRO_SESSION_KEY = "la-negra:intro-seen";
+
+function hasSeenIntro() {
+  try {
+    return window.sessionStorage.getItem(INTRO_SESSION_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function markIntroSeen() {
+  try {
+    window.sessionStorage.setItem(INTRO_SESSION_KEY, "1");
+  } catch {
+    // Storage can be unavailable in strict privacy modes; the intro still remains non-blocking.
+  }
+}
+
 /**
  * Kinetic boot loader (campaign-style).
  * Phase 1 (0–1.1s): three gold bars pulse on black.
  * Phase 2 (1.1–2.6s): the house phrase crosses the screen at giant scale,
  *   zooming from oversized to readable as it slides — kinetic marquee.
  * Exit: the whole panel wipes upward like a curtain, revealing the hero.
- * Body scroll is locked while visible. Reduced motion: simple fade.
+ * It runs once per session, never blocks past the hard timeout, and is skipped
+ * for reduced motion or Save-Data. Body scroll is locked only while visible.
  */
 export function CinematicLoader() {
   const t = useT();
   const setLoaderDone = useUIStore((s) => s.setLoaderDone);
   const prefersReduced = useReducedMotion();
   const [phase, setPhase] = useState<"bars" | "phrase">("bars");
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const phraseTimer = setTimeout(() => setPhase("phrase"), 1100);
-    const hideTimer = setTimeout(() => setShow(false), prefersReduced ? 1200 : 2700);
-    const doneTimer = setTimeout(
-      () => {
-        setLoaderDone(true);
-        document.body.style.overflow = prev || "";
-      },
-      prefersReduced ? 1600 : 3400,
+    const saveData = Boolean(
+      (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData,
     );
 
+    if (hasSeenIntro() || prefersReduced || saveData) {
+      markIntroSeen();
+      setLoaderDone(true);
+      return;
+    }
+
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const showTimer = window.setTimeout(() => setShow(true), 0);
+
+    let finished = false;
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      setShow(false);
+      setLoaderDone(true);
+      markIntroSeen();
+      document.body.style.overflow = prev || "";
+    };
+
+    const phraseTimer = setTimeout(() => setPhase("phrase"), 1100);
+    const hideTimer = setTimeout(() => setShow(false), 2700);
+    const doneTimer = setTimeout(finish, 3400);
+    const hardStopTimer = setTimeout(finish, 4200);
+
     return () => {
+      clearTimeout(showTimer);
       clearTimeout(phraseTimer);
       clearTimeout(hideTimer);
       clearTimeout(doneTimer);
+      clearTimeout(hardStopTimer);
       document.body.style.overflow = prev || "";
     };
   }, [setLoaderDone, prefersReduced]);
@@ -48,7 +85,7 @@ export function CinematicLoader() {
       {show && (
         <motion.div
           key="kinetic-loader"
-          className="wine-surface fixed inset-0 z-[100] flex items-center justify-center overflow-hidden"
+          className="loader-failsafe wine-surface fixed inset-0 z-[100] flex items-center justify-center overflow-hidden"
           initial={{ y: 0, opacity: 1 }}
           exit={
             prefersReduced

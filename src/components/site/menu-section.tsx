@@ -18,7 +18,7 @@ export function MenuSection() {
   return (
     <section
       id="menu"
-      className="relative border-y border-border/30 bg-[#0c0c0c] py-24 sm:py-32 lg:py-40"
+      className="relative overflow-x-clip border-y border-border/30 bg-[#0c0c0c] py-24 sm:py-32 lg:py-40"
       aria-labelledby="menu-heading"
     >
       {/* faint gold orb */}

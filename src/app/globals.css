@@ -111,6 +111,8 @@
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    max-width: 100%;
+    overflow-x: clip;
   }
   body {
     @apply bg-background text-foreground;
@@ -118,6 +120,13 @@
     font-feature-settings: "ss01", "cv01";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+  /* Keep the two fixed bottom actions from competing on first visit. */
+  body:has([data-cookie-consent="open"]) [data-floating-whatsapp] {
+    pointer-events: none;
+    visibility: hidden;
   }
   /* Cinematic custom scrollbar */
   ::-webkit-scrollbar {
@@ -307,6 +316,16 @@
     0%, 100% { transform: scaleY(0.35); opacity: 0.7; }
     50% { transform: scaleY(1); opacity: 1; }
   }
+  /* The intro can never trap the page if hydration or animation teardown fails. */
+  @keyframes loader-failsafe-hide {
+    to {
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+  .loader-failsafe {
+    animation: loader-failsafe-hide 0s linear 4.2s forwards;
+  }
   /* ============================================================
      CLUB LIGHT LAYER — the antro's lighting rig.
      Two light colors only: warm gold (spotlight) and ultraviolet
@@ -436,6 +455,9 @@
     .chrome-gold,
     .eq-bar,
     .sparkle {
+      animation: none !important;
+    }
+    .whatsapp-pulse {
       animation: none !important;
     }
   }
