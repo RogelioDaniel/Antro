@@ -124,7 +124,8 @@
     overflow-x: clip;
   }
   /* Keep the two fixed bottom actions from competing on first visit. */
-  body:has([data-cookie-consent="open"]) [data-floating-whatsapp] {
+  body:has([data-cookie-consent="open"]) [data-floating-whatsapp],
+  body:has([data-mobile-menu="open"]) [data-floating-whatsapp] {
     pointer-events: none;
     visibility: hidden;
   }
